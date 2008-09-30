@@ -1,0 +1,22 @@
+﻿<ivy-module version="2.0">
+    <info organisation="talis" module="majat-core"/>
+	<configurations>
+      <conf name="runtime" />
+      <conf name="build" extends="runtime" visibility="private"/>   
+      <conf name="pmd" extends="build" visibility="private"/>
+      <conf name="cobertura" extends="build" visibility="private"/>
+    </configurations>
+    <dependencies defaultconf="runtime->default">
+        <dependency org="commons-lang" name="commons-lang" rev="2.1" /> 
+        <dependency org="commons-logging" name="commons-logging" rev="1.1.1" />
+        <dependency org="log4j" name="log4j" rev="1.2.14" />
+                
+        <!-- jars only used for build -->
+	    <dependency org="junit" name="junit" rev="4.1" conf="build->default"/>
+		<dependency org="cobertura" name="cobertura" rev="1.9rc1" conf="cobertura->default"/>
+        <dependency org="org.apache.ant" name="ant" rev="1.7.0" conf="build->default"/>
+        <dependency org="pmd" name="pmd" rev="4.2.3" conf="pmd->default"/>
+        <dependency org="org.easymock" name="easymockclassextension" rev="2.4" conf="build->default"/>
+        
+    </dependencies>
+</ivy-module>
