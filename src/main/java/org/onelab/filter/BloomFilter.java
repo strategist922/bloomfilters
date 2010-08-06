@@ -183,20 +183,11 @@ public class BloomFilter extends Filter {
 
   @Override
   public Object clone(){
-    BloomFilter bf = new BloomFilter(vectorSize, nbHash, hashType);
+    Filter bf = new BloomFilter(vectorSize, nbHash, hashType);
     bf.or(this);
     return bf;
   }//end clone()
   
-  /**
-   * @return size of the the bloomfilter
-   */
-  public int getVectorSize() {
-    return this.vectorSize;
-  }
-
-  // Writable
-
   @Override
   public void write(DataOutput out) throws IOException {
     super.write(out);

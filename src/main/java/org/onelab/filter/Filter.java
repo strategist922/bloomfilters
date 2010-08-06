@@ -213,4 +213,11 @@ public abstract class Filter implements Writable {
     this.vectorSize = in.readInt();
     this.hash = new HashFunction(this.vectorSize, this.nbHash, this.hashType);
   }
+
+/**
+   * @return size of the the bloomfilter
+   */
+public int getVectorSize() {
+    return this.vectorSize;
+  }
 }//end class
