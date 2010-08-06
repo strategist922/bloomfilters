@@ -189,17 +189,14 @@ public class RotatingBloomFilter extends Filter {
 			for (int i = 0; i < filters.length; i++) {
 				tmp[i] = (BloomFilter) filters[i].clone();
 			}
-
-			tmp[tmp.length - 1] = new BloomFilter(vectorSize, nbHash, hashType);			
 		} else { // rotate, drop the oldest row (i.e. i=0)
 			tmp = new BloomFilter[filters.length];
 
 			for (int i = 0; i < filters.length - 1; i++) {
 				tmp[i] = (BloomFilter) filters[i + 1].clone();
 			}
-
-			tmp[tmp.length - 1] = new BloomFilter(vectorSize, nbHash, hashType);
 		}
+		tmp[tmp.length - 1] = new BloomFilter(vectorSize, nbHash, hashType);			
 
 		filters = tmp;
 	}
