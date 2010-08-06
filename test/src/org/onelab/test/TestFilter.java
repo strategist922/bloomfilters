@@ -308,6 +308,7 @@ public class TestFilter {
   /** Test a DynamicBloomFilter
    * @throws UnsupportedEncodingException
    */
+  @Test
   public void testDynamicBloomFilter() throws UnsupportedEncodingException {
     Filter bf = new DynamicBloomFilter(8, 2, Hash.JENKINS_HASH, 2);
     Key key = new StringKey("toto");
@@ -321,4 +322,23 @@ public class TestFilter {
     assertFalse(bf.membershipTest(new StringKey("xyzzy")));
     assertFalse(bf.membershipTest(new StringKey("abcd")));
   }
+  
+  /** Test a RotatingBloomFilter
+   * @throws UnsupportedEncodingException
+   */
+  @Test
+  public void testRotatingBloomFilter() throws UnsupportedEncodingException {
+    Filter bf = new RotatingBloomFilter(8, 2, Hash.JENKINS_HASH, 2, 6);
+    Key key = new StringKey("toto");
+    Key k2 = new StringKey("lulu");
+    Key k3 = new StringKey("mama");
+    bf.add(key);
+    bf.add(k2);
+    bf.add(k3);
+    assertTrue(bf.membershipTest(key));
+    assertTrue(bf.membershipTest(new StringKey("graknyl")));
+    assertFalse(bf.membershipTest(new StringKey("xyzzy")));
+    assertFalse(bf.membershipTest(new StringKey("abcd")));
+  }
+  
 }//end class
