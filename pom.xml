@@ -122,9 +122,9 @@
       <layout>default</layout>
     </repository>
     <snapshotRepository>
-      <id>talis-repo-dev</id>
-      <name>Talis Nexus Snapshots Repository</name>
-      <url>http://locke.talis.local/nexus/content/repositories/snapshots</url>
+      <id>talis-repo-thirdparty-snapshots</id>
+      <name>Talis Nexus ThirdParty Snapshots Repository</name>
+      <url>http://locke.talis.local/nexus/content/repositories/thirdparty-snapshots</url>
       <layout>default</layout>
     </snapshotRepository>
   </distributionManagement>
