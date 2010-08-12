@@ -50,7 +50,6 @@ package org.onelab.filter;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.Arrays;                        //TODO: remove
 
 import org.apache.hadoop.hbase.util.Hash;
 
@@ -219,7 +218,6 @@ public final class CountingBloomFilter extends Filter {
   }//end or()
 
   @Override
-  @SuppressWarnings("unused")
   public void xor(Filter filter){
     throw new UnsupportedOperationException("xor() is undefined for "
         + this.getClass().getName());

@@ -108,7 +108,6 @@ public final class HashFunction {
    * @param k The specified key.
    * @return The array of hashed values.
    */
-  @SuppressWarnings("unchecked")
   public int[] hash(Key k){
       byte[] b = k.getBytes();
       if(b == null) {

@@ -20,8 +20,6 @@
 
 package org.apache.hadoop.hbase.util;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 
 /**
  * Produces 32-bit hash for hash table lookup.
@@ -238,23 +236,24 @@ public class JenkinsHash extends Hash {
     return (int)(c & INT_MASK);
   }
   
-  /**
-   * Compute the hash of the specified file
-   * @param args name of file to compute hash of.
-   * @throws IOException
-   */
-  public static void main(String[] args) throws IOException {
-    if (args.length != 1) {
-      System.err.println("Usage: JenkinsHash filename");
-      System.exit(-1);
-    }
-    FileInputStream in = new FileInputStream(args[0]);
-    byte[] bytes = new byte[512];
-    int value = 0;
-    JenkinsHash hash = new JenkinsHash();
-    for (int length = in.read(bytes); length > 0 ; length = in.read(bytes)) {
-      value = hash.hash(bytes, length, value);
-    }
-    System.out.println(Math.abs(value));
-  }
+//  /**
+//   * Compute the hash of the specified file
+//   * @param args name of file to compute hash of.
+//   * @throws IOException
+//   */
+//  public static void main(String[] args) throws IOException {
+//    if (args.length != 1) {
+//      System.err.println("Usage: JenkinsHash filename");
+//      System.exit(-1);
+//    }
+//    FileInputStream in = new FileInputStream(args[0]);
+//    byte[] bytes = new byte[512];
+//    int value = 0;
+//    JenkinsHash hash = new JenkinsHash();
+//    for (int length = in.read(bytes); length > 0 ; length = in.read(bytes)) {
+//      value = hash.hash(bytes, length, value);
+//    }
+//    System.out.println(Math.abs(value));
+//  }
+
 }
