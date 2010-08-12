@@ -49,7 +49,6 @@
 package org.onelab.filter;
 
 import java.io.UnsupportedEncodingException;
-import org.onelab.filter.Key;
 
 /**
  * Test class for keys.
