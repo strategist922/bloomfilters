@@ -1,8 +1,8 @@
 package org.onelab.filter;
 
 /**
- * This is a small modification to org.onelab.filter.RotatingBloomFilter
- * RotatingBloomFilter is Copyright (c) 2005, European Commission project 
+ * This is a small modification to org.onelab.filter.DynamicBloomFilter
+ * DynamicBloomFilter is Copyright (c) 2005, European Commission project 
  * OneLab under contract 034819 (http://www.one-lab.org).
  * Licensed to the Apache Software Foundation (ASF).
  */
@@ -15,10 +15,10 @@ import org.apache.hadoop.hbase.util.Hash;
 
 public class RotatingBloomFilter extends Filter {
 
-	private int nr; // maximum number of keys in a rotating Bloom filter row.
-	private int currentNbRecord; // number of keys recorded in the current standard active Bloom filter
-	private BloomFilter[] filters; // array of Bloom filters
-	private int nf; // maximum number of Bloom filters 
+	private int maximumNumberOfKeysPerFilter; 
+	private int currentNumberOfKeys; 
+	private BloomFilter[] filters;
+	private int maximumNumberOfBloomFilters;  
 
 	/**
 	 * Constructor.
@@ -28,15 +28,16 @@ public class RotatingBloomFilter extends Filter {
 	 * @param vectorSize The number of bits in the vector.
 	 * @param nbHash The number of hash function to consider.
 	 * @param hashType type of the hashing function (see {@link Hash}).
-	 * @param nr The threshold for the maximum number of keys to record in a rotating Bloom filter row.
-	 * @param nf The threshold for the maximum number of rows.
+	 * @param maximumNumberOfKeysPerFilter The threshold for the maximum number of keys to record in a rotating Bloom filter row.
+	 * @param maximumNumberOfBloomFilters The threshold for the maximum number of rows.
 	 */
-	public RotatingBloomFilter(int vectorSize, int nbHash, int hashType, int nr, int nf) {
+	public RotatingBloomFilter(int vectorSize, int nbHash, int hashType, 
+			int maximumNumberOfKeysPerFilter, int maximumNumberOfBloomFilters) {
 		super(vectorSize, nbHash, hashType);
 
-		this.nr = nr;
-		this.nf = nf;
-		this.currentNbRecord = 0;
+		this.maximumNumberOfKeysPerFilter = maximumNumberOfKeysPerFilter;
+		this.maximumNumberOfBloomFilters = maximumNumberOfBloomFilters;
+		this.currentNumberOfKeys = 0;
 
 		filters = new BloomFilter[1];
 		filters[0] = new BloomFilter(this.vectorSize, this.nbHash, this.hashType);
@@ -53,29 +54,12 @@ public class RotatingBloomFilter extends Filter {
 		if (bf == null) {
 			addRow();
 			bf = filters[filters.length - 1];
-			currentNbRecord = 0;
+			currentNumberOfKeys = 0;
 		}
 
 		bf.add(key);
 
-		currentNbRecord++;
-	}
-
-	@Override
-	public void and(Filter filter) {
-		if (filter == null || !(filter instanceof RotatingBloomFilter) || filter.vectorSize != this.vectorSize || filter.nbHash != this.nbHash) {
-			throw new IllegalArgumentException("filters cannot be and-ed");
-		}
-
-		RotatingBloomFilter dbf = (RotatingBloomFilter) filter;
-
-		if (dbf.filters.length != this.filters.length || dbf.nr != this.nr) {
-			throw new IllegalArgumentException("filters cannot be and-ed");
-		}
-
-		for (int i = 0; i < filters.length; i++) {
-			filters[i].and(dbf.filters[i]);
-		}
+		currentNumberOfKeys++;
 	}
 
 	@Override
@@ -93,97 +77,12 @@ public class RotatingBloomFilter extends Filter {
 		return false;
 	}
 
-	@Override
-	public void not() {
-		for (int i = 0; i < filters.length; i++) {
-			filters[i].not();
-		}
-	}
-
-	@Override
-	public void or(Filter filter) {
-		if (filter == null || !(filter instanceof RotatingBloomFilter) || filter.vectorSize != this.vectorSize || filter.nbHash != this.nbHash) {
-			throw new IllegalArgumentException("filters cannot be or-ed");
-		}
-
-		RotatingBloomFilter dbf = (RotatingBloomFilter) filter;
-
-		if (dbf.filters.length != this.filters.length || dbf.nr != this.nr) {
-			throw new IllegalArgumentException("filters cannot be or-ed");
-		}
-		for (int i = 0; i < filters.length; i++) {
-			filters[i].or(dbf.filters[i]);
-		}
-	}
-
-	@Override
-	public void xor(Filter filter) {
-		if (filter == null || !(filter instanceof RotatingBloomFilter) || filter.vectorSize != this.vectorSize || filter.nbHash != this.nbHash) {
-			throw new IllegalArgumentException("filters cannot be xor-ed");
-		}
-		RotatingBloomFilter dbf = (RotatingBloomFilter) filter;
-
-		if (dbf.filters.length != this.filters.length || dbf.nr != this.nr) {
-			throw new IllegalArgumentException("filters cannot be xor-ed");
-		}
-
-		for (int i = 0; i < filters.length; i++) {
-			filters[i].xor(dbf.filters[i]);
-		}
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder res = new StringBuilder();
-
-		for (int i = 0; i < filters.length; i++) {
-			res.append(filters[i]);
-			res.append(Character.LINE_SEPARATOR);
-		}
-		return res.toString();
-	}
-
-	@Override
-	public Object clone() {
-		RotatingBloomFilter rbf = new RotatingBloomFilter(vectorSize, nbHash, hashType, nr, nf);
-		rbf.currentNbRecord = this.currentNbRecord;
-		rbf.filters = new BloomFilter[this.filters.length];
-		for (int i = 0; i < this.filters.length; i++) {
-			rbf.filters[i] = (BloomFilter) this.filters[i].clone();
-		}
-		return rbf;
-	}
-
-	@Override
-	public void write(DataOutput out) throws IOException {
-		super.write(out);
-		out.writeInt(nr);
-		out.writeInt(currentNbRecord);
-		out.writeInt(filters.length);
-		for (int i = 0; i < filters.length; i++) {
-			filters[i].write(out);
-		}
-	}
-
-	@Override
-	public void readFields(DataInput in) throws IOException {
-		super.readFields(in);
-		nr = in.readInt();
-		currentNbRecord = in.readInt();
-		int len = in.readInt();
-		filters = new BloomFilter[len];
-		for (int i = 0; i < filters.length; i++) {
-			filters[i] = new BloomFilter();
-			filters[i].readFields(in);
-		}
-	}
-
 	/**
 	 * Adds a new row to <i>this</i> rotating Bloom filter.
 	 */
 	private void addRow() {
 		BloomFilter[] tmp;
-		if ( filters.length <= nf ) { // add new rows
+		if ( filters.length < maximumNumberOfBloomFilters ) { // add new rows
 			tmp = new BloomFilter[filters.length + 1];
 
 			for (int i = 0; i < filters.length; i++) {
@@ -207,11 +106,59 @@ public class RotatingBloomFilter extends Filter {
 	 * @return BloomFilter The active standard Bloom filter. <code>Null</code> otherwise.
 	 */
 	private BloomFilter getActiveStandardBF() {
-		if (currentNbRecord >= nr) {
+		if (currentNumberOfKeys >= maximumNumberOfKeysPerFilter) {
 			return null;
 		}
 
 		return filters[filters.length - 1];
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder res = new StringBuilder();
+
+		for (int i = 0; i < filters.length; i++) {
+			res.append(filters[i]);
+			res.append(Character.LINE_SEPARATOR);
+		}
+		return res.toString();
+	}
+
+	// We decided not to implement (and not to test!) things we do not need/use -- PC
+	
+	@Override
+	public void and(Filter filter) {
+		throw new UnsupportedOperationException("Not implemented.");
+	}
+
+	@Override
+	public void not() {
+		throw new UnsupportedOperationException("Not implemented.");
+	}
+
+	@Override
+	public void or(Filter filter) {
+		throw new UnsupportedOperationException("Not implemented.");
+	}
+
+	@Override
+	public void xor(Filter filter) {
+		throw new UnsupportedOperationException("Not implemented.");
+	}
+
+	@Override
+	public Object clone() {
+		throw new UnsupportedOperationException("Not implemented.");
+	}
+
+	@Override
+	public void write(DataOutput out) throws IOException {
+		throw new UnsupportedOperationException("Not implemented.");
+	}
+
+	@Override
+	public void readFields(DataInput in) throws IOException {
+		throw new UnsupportedOperationException("Not implemented.");
+	}
+	
 }
