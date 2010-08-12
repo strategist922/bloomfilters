@@ -183,7 +183,7 @@ public class BloomFilter extends Filter {
 
   @Override
   public Object clone(){
-    Filter bf = new BloomFilter(vectorSize, nbHash, hashType);
+    BloomFilter bf = new BloomFilter(vectorSize, nbHash, hashType);
     bf.or(this);
     return bf;
   }//end clone()
