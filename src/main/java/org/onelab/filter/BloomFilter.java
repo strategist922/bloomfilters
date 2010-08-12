@@ -123,10 +123,7 @@ public class BloomFilter extends Filter {
 
   @Override
   public void and(Filter filter){
-    if(filter == null
-        || !(filter instanceof BloomFilter)
-        || filter.vectorSize != this.vectorSize
-        || filter.nbHash != this.nbHash) {
+    if(!isCompatible(filter)) {
       throw new IllegalArgumentException("filters cannot be and-ed");
     }
 
@@ -156,10 +153,7 @@ public class BloomFilter extends Filter {
 
   @Override
   public void or(Filter filter){
-    if(filter == null
-        || !(filter instanceof BloomFilter)
-        || filter.vectorSize != this.vectorSize
-        || filter.nbHash != this.nbHash) {
+    if(!isCompatible(filter)) {
       throw new IllegalArgumentException("filters cannot be or-ed");
     }
     bits.or(((BloomFilter) filter).bits);
@@ -167,10 +161,7 @@ public class BloomFilter extends Filter {
 
   @Override
   public void xor(Filter filter){
-    if(filter == null
-        || !(filter instanceof BloomFilter)
-        || filter.vectorSize != this.vectorSize
-        || filter.nbHash != this.nbHash) {
+    if(!isCompatible(filter)) {
       throw new IllegalArgumentException("filters cannot be xor-ed");
     }
     bits.xor(((BloomFilter) filter).bits);
@@ -228,4 +219,14 @@ public class BloomFilter extends Filter {
   private int getNBytes() {
     return (vectorSize + 7) / 8;
   }
+  
+  private boolean isCompatible(Filter filter) {
+	  if ( filter == null ) return false;
+	  if ( !(filter instanceof BloomFilter) ) return false;
+	  if ( filter.vectorSize != this.vectorSize ) return false;
+	  if ( filter.nbHash != this.nbHash ) return false;
+	  
+	  return true;
+  }
+  
 }//end class
