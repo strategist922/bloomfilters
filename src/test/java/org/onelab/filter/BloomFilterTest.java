@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.UnsupportedEncodingException;
 
@@ -136,6 +135,60 @@ public class BloomFilterTest {
 		assertEquals("{1, 2, 3, 4, 5}", bf.toString());	
 	}
 
+	@Test (expected=IllegalArgumentException.class)
+	public void testAndThrowsExceptionWhenFiltersAreIncompatible1() {
+		BloomFilter a = new BloomFilter(vectorSize + 1, numberHashFunctions, Hash.JENKINS_HASH);
+		bf.and(a);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testAndThrowsExceptionWhenFiltersAreIncompatible2() {
+		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions + 1, Hash.JENKINS_HASH);
+		bf.and(a);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testAndThrowsExceptionWhenFiltersAreIncompatible3() {
+		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions, Hash.MURMUR_HASH);
+		bf.and(a);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testOrThrowsExceptionWhenFiltersAreIncompatible1() {
+		BloomFilter a = new BloomFilter(vectorSize + 1, numberHashFunctions, Hash.JENKINS_HASH);
+		bf.or(a);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testOrThrowsExceptionWhenFiltersAreIncompatible2() {
+		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions + 1, Hash.JENKINS_HASH);
+		bf.or(a);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testOrThrowsExceptionWhenFiltersAreIncompatible3() {
+		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions, Hash.MURMUR_HASH);
+		bf.or(a);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testXorThrowsExceptionWhenFiltersAreIncompatible1() {
+		BloomFilter a = new BloomFilter(vectorSize + 1, numberHashFunctions, Hash.JENKINS_HASH);
+		bf.xor(a);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testXorThrowsExceptionWhenFiltersAreIncompatible2() {
+		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions + 1, Hash.JENKINS_HASH);
+		bf.xor(a);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testXorThrowsExceptionWhenFiltersAreIncompatible3() {
+		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions, Hash.MURMUR_HASH);
+		bf.xor(a);
+	}
+	
 	@Test
 	public void testToString() throws UnsupportedEncodingException {
 		assertEquals("{}", bf.toString());
