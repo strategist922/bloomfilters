@@ -6,6 +6,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.apache.hadoop.hbase.util.Hash;
 import org.junit.After;
@@ -74,6 +77,93 @@ public class BloomFilterTest {
 	    assertFalse(bf.membershipTest(k6));
 	}
 
+	@Test
+	public void testAddListKeys() throws UnsupportedEncodingException {
+	    Key k1 = new StringKey("toto");
+	    Key k2 = new StringKey("lulu");
+	    Key k3 = new StringKey("mama");
+	    Key k4 = new StringKey("graknyl");
+	    Key k5 = new StringKey("xyzzy");
+	    Key k6 = new StringKey("abcd");
+	    
+		List<Key> keys = new ArrayList<Key>();
+		keys.add(k1);
+		keys.add(k2);
+		keys.add(k3);
+		
+		bf.add(keys);
+		
+	    assertTrue(bf.membershipTest(k1));
+	    assertTrue(bf.membershipTest(k2));
+	    assertTrue(bf.membershipTest(k3));
+	    assertTrue(bf.membershipTest(k4)); // this collides
+	    assertFalse(bf.membershipTest(k5));
+	    assertFalse(bf.membershipTest(k6));
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testAddListKeysWithNull() throws UnsupportedEncodingException {
+		bf.add((List<Key>)null);
+	}
+	
+	@Test
+	public void testAddCollectionKeys() throws UnsupportedEncodingException {
+	    Key k1 = new StringKey("toto");
+	    Key k2 = new StringKey("lulu");
+	    Key k3 = new StringKey("mama");
+	    Key k4 = new StringKey("graknyl");
+	    Key k5 = new StringKey("xyzzy");
+	    Key k6 = new StringKey("abcd");
+	    
+		Collection<Key> keys = new ArrayList<Key>();
+		keys.add(k1);
+		keys.add(k2);
+		keys.add(k3);
+		
+		bf.add(keys);
+		
+	    assertTrue(bf.membershipTest(k1));
+	    assertTrue(bf.membershipTest(k2));
+	    assertTrue(bf.membershipTest(k3));
+	    assertTrue(bf.membershipTest(k4)); // this collides
+	    assertFalse(bf.membershipTest(k5));
+	    assertFalse(bf.membershipTest(k6));
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testAddCollectionKeysWithNull() throws UnsupportedEncodingException {
+		bf.add((Collection<Key>)null);
+	}
+	
+	@Test
+	public void testAddArrayKeys() throws UnsupportedEncodingException {
+	    Key k1 = new StringKey("toto");
+	    Key k2 = new StringKey("lulu");
+	    Key k3 = new StringKey("mama");
+	    Key k4 = new StringKey("graknyl");
+	    Key k5 = new StringKey("xyzzy");
+	    Key k6 = new StringKey("abcd");
+	    
+		Collection<Key> keys = new ArrayList<Key>();
+		keys.add(k1);
+		keys.add(k2);
+		keys.add(k3);
+
+		bf.add(keys.toArray(new Key[]{}));
+
+	    assertTrue(bf.membershipTest(k1));
+	    assertTrue(bf.membershipTest(k2));
+	    assertTrue(bf.membershipTest(k3));
+	    assertTrue(bf.membershipTest(k4)); // this collides
+	    assertFalse(bf.membershipTest(k5));
+	    assertFalse(bf.membershipTest(k6));
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testAddArrayKeysWithNull() throws UnsupportedEncodingException {
+		bf.add((Key[])null);
+	}
+	
 	@Test
 	public void testAnd() throws UnsupportedEncodingException {
 		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH);
