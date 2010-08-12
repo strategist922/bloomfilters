@@ -101,6 +101,7 @@ public final class HashFunction {
 
   /** Clears <i>this</i> hash function. A NOOP */
   public void clear(){
+	  // NOOP
   }//end clear()
 
   /**
