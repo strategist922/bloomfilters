@@ -64,11 +64,6 @@ public class Key implements Comparable<Key> {
 	 */
 	double weight;
 
-	/** default constructor - use with readFields */
-	public Key() {
-		super();
-	}
-
 	/**
 	 * Constructor.
 	 * <p>
