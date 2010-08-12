@@ -67,13 +67,13 @@ import org.apache.hadoop.hbase.util.Hash;
  */
 public final class HashFunction {
   /** The number of hashed values. */
-  private int nbHash;
+  private final int nbHash;
 
   /** The maximum highest returned value. */
-  private int maxValue;
+  private final int maxValue;
 
   /** Hashing algorithm to use. */
-  private Hash hashFunction;
+  private final Hash hashFunction;
   
   /**
    * Constructor.
