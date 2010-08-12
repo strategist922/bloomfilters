@@ -87,11 +87,6 @@ public abstract class Filter {
 	/** Type of hashing function to use. */
 	protected int hashType;
 
-	/** Default constructor - use with readFields */
-	protected Filter() {
-		super();
-	}
-
 	/**
 	 * Constructor.
 	 * 

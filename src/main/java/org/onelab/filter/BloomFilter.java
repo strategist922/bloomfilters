@@ -77,12 +77,7 @@ import org.apache.hadoop.hbase.util.Hash;
  */
 public class BloomFilter extends Filter {
 	/** The bit vector. */
-	BitSet bits;
-
-	/** Default constructor - use with readFields */
-	public BloomFilter() {
-		super();
-	}
+	protected BitSet bits;
 
 	/**
 	 * Constructor
@@ -123,7 +118,7 @@ public class BloomFilter extends Filter {
 	@Override
 	public boolean membershipTest(Key key) {
 		if (key == null) {
-			throw new IllegalArgumentException("Key can not be null");
+			return false;
 		}
 
 		int[] h = hash.hash(key);

@@ -30,7 +30,25 @@ public class RotatingBloomFilterTest {
 	public void tearDown() throws Exception {
 		bf = null;
 	}
-
+	
+	@Test
+	public void testRotatingBloomFilter() {
+		assertNotNull(bf);
+		assertEquals(vectorSize, bf.vectorSize);
+		assertEquals(numberHashFunctions, bf.nbHash);
+		assertEquals(Hash.JENKINS_HASH, bf.hashType);
+		assertEquals(maximumNumberOfKeysPerFilter, bf.maximumNumberOfKeysPerFilter);
+		assertEquals(maximumNumberOfBloomFilters, bf.maximumNumberOfBloomFilters);
+		assertEquals(0, bf.currentNumberOfKeys);
+		assertEquals(1, bf.filters.length);
+		assertNotNull(bf.filters[0]);
+		assertTrue(bf.filters[0] instanceof Filter);
+		assertTrue(bf.filters[0] instanceof BloomFilter);
+		assertEquals(vectorSize, bf.filters[0].vectorSize);
+		assertEquals(numberHashFunctions, bf.filters[0].nbHash);
+		assertEquals(Hash.JENKINS_HASH, bf.filters[0].hashType);
+	}
+	
 	@Test (expected=IllegalArgumentException.class)
 	public void testAddNullKey() {
 		bf.add((Key)null);
@@ -117,24 +135,6 @@ public class RotatingBloomFilterTest {
 //				assertFalse(bf.membershipTest(new StringKey("word-" + i)));
 //			}
 		}
-	}
-	
-	@Test
-	public void testRotatingBloomFilter() {
-		assertNotNull(bf);
-		assertEquals(vectorSize, bf.vectorSize);
-		assertEquals(numberHashFunctions, bf.nbHash);
-		assertEquals(Hash.JENKINS_HASH, bf.hashType);
-		assertEquals(maximumNumberOfKeysPerFilter, bf.maximumNumberOfKeysPerFilter);
-		assertEquals(maximumNumberOfBloomFilters, bf.maximumNumberOfBloomFilters);
-		assertEquals(0, bf.currentNumberOfKeys);
-		assertEquals(1, bf.filters.length);
-		assertNotNull(bf.filters[0]);
-		assertTrue(bf.filters[0] instanceof Filter);
-		assertTrue(bf.filters[0] instanceof BloomFilter);
-		assertEquals(vectorSize, bf.filters[0].vectorSize);
-		assertEquals(numberHashFunctions, bf.filters[0].nbHash);
-		assertEquals(Hash.JENKINS_HASH, bf.filters[0].hashType);
 	}
 
 	@Test

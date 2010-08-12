@@ -101,13 +101,6 @@ public class DynamicBloomFilter extends Filter {
 	private BloomFilter[] matrix;
 
 	/**
-	 * Zero-args constructor for the serialization.
-	 */
-	public DynamicBloomFilter() {
-		super();
-	}
-
-	/**
 	 * Constructor.
 	 * <p>
 	 * Builds an empty Dynamic Bloom filter.
