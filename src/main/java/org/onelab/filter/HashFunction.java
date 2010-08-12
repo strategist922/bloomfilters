@@ -50,8 +50,6 @@
 package org.onelab.filter;
 
 import org.apache.hadoop.hbase.util.Hash;
-import org.apache.hadoop.hbase.util.JenkinsHash;
-import org.apache.hadoop.hbase.util.MurmurHash;
 
 /**
  * Implements a hash object that returns a certain number of hashed values.

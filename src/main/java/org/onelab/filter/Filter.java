@@ -91,7 +91,7 @@ public abstract class Filter implements Writable {
   protected int hashType;
 
   /** Default constructor - use with readFields */
-  protected Filter() {}
+  protected Filter() { super(); }
   
   /** 
    * Constructor.
