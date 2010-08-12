@@ -71,7 +71,7 @@ public class Key implements WritableComparable {
   double weight;
 
   /** default constructor - use with readFields */
-  public Key() {}
+  public Key() { super(); }
 
   /**
    * Constructor.

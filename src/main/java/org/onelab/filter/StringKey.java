@@ -65,7 +65,7 @@ import org.onelab.filter.Key;
 public class StringKey extends Key {
   
   /** Default constructor - use with readFields */
-  public StringKey() {}
+  public StringKey() { super(); }
 
   /**
    * Construct a Key using the specified String and default weight
