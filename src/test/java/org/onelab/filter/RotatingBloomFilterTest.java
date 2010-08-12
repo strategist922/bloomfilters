@@ -1,7 +1,9 @@
 package org.onelab.filter;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.onelab.filter.RotatingBloomFilter.LINE_SEPARATOR;
 
 import java.io.IOException;
@@ -9,9 +11,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.apache.hadoop.hbase.util.Hash;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class RotatingBloomFilterTest {
@@ -22,14 +22,6 @@ public class RotatingBloomFilterTest {
 	private static final int maximumNumberOfKeysPerFilter = 2;
 	private static final int maximumNumberOfBloomFilters = 6;
 	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
 	@Before
 	public void setUp() throws Exception {
 		bf = new RotatingBloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter, maximumNumberOfBloomFilters);
@@ -37,6 +29,7 @@ public class RotatingBloomFilterTest {
 
 	@After
 	public void tearDown() throws Exception {
+		bf = null;
 	}
 
 	@Test
