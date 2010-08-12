@@ -109,8 +109,8 @@ public class BloomFilter extends Filter {
 
   @Override
   public void add(Key key) {
-    if(key == null) {
-      throw new NullPointerException("key cannot be null");
+    if (key == null) {
+      throw new IllegalArgumentException("Key can not be null");
     }
 
     int[] h = hash.hash(key);
@@ -135,8 +135,8 @@ public class BloomFilter extends Filter {
 
   @Override
   public boolean membershipTest(Key key){
-    if(key == null) {
-      throw new NullPointerException("key cannot be null");
+    if (key == null) {
+      throw new IllegalArgumentException("Key can not be null");
     }
 
     int[] h = hash.hash(key);

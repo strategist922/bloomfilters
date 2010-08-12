@@ -36,6 +36,11 @@ public class RotatingBloomFilterTest {
 	public void testAddNullKey() {
 		bf.add((Key)null);
 	}
+
+	@Test
+	public void testMembershipTest() {
+		assertFalse(bf.membershipTest((Key)null));
+	}
 	
 	@Test
 	public void testAddKeyAndMembershipTest() throws UnsupportedEncodingException {

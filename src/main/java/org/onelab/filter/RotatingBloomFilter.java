@@ -68,7 +68,7 @@ public class RotatingBloomFilter extends Filter {
 	@Override
 	public boolean membershipTest(Key key) {
 		if (key == null) {
-			return true;
+			return false;
 		}
 
 		for (int i = 0; i < filters.length; i++) {
