@@ -78,7 +78,7 @@ public class Key implements Comparable<Key> {
 	 */
 	public Key(byte[] value) {
 		this(value, 1.0);
-	}// end constructor
+	}
 
 	/**
 	 * Constructor.
@@ -90,7 +90,7 @@ public class Key implements Comparable<Key> {
 	 */
 	public Key(byte[] value, double weight) {
 		set(value, weight);
-	}// end constructor
+	}
 
 	/**
 	 * @param value

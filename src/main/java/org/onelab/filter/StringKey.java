@@ -56,37 +56,38 @@ import java.io.UnsupportedEncodingException;
  * It gives an example on how to extend Key.
  * 
  * contract <a href="http://www.one-lab.org">European Commission One-Lab Project 034819</a>.
- *
+ * 
  * @version 1.0 - 5 Feb. 07
  * 
  * @see org.onelab.filter.Key A key stored in a filter
  */
 public class StringKey extends Key {
-  
-  /** Default constructor - use with readFields */
-  public StringKey() { super(); }
 
-  /**
-   * Construct a Key using the specified String and default weight
-   * 
-   * @param key String key value
-   * @throws UnsupportedEncodingException
-   */
-  public StringKey(String key) throws UnsupportedEncodingException {
-    super(key.getBytes("UTF-8"));
-  }
+	/** Default constructor - use with readFields */
+	public StringKey() {
+		super();
+	}
 
-  /**
-   * Construct a Key using the specified string and weight
-   * 
-   * @param key - String key value
-   * @param weight key weight
-   * @throws UnsupportedEncodingException
-   */
-  public StringKey(String key, double weight)
-    throws UnsupportedEncodingException {
-    
-    super(key.getBytes("UTF-8"), weight);
-  }
+	/**
+	 * Construct a Key using the specified String and default weight
+	 * 
+	 * @param key  String key value
+	 * @throws UnsupportedEncodingException
+	 */
+	public StringKey(String key) throws UnsupportedEncodingException {
+		super(key.getBytes("UTF-8"));
+	}
+
+	/**
+	 * Construct a Key using the specified string and weight
+	 * 
+	 * @param key  String key value
+	 * @param weight  key weight
+	 * 
+	 * @throws UnsupportedEncodingException
+	 */
+	public StringKey(String key, double weight) throws UnsupportedEncodingException {
+		super(key.getBytes("UTF-8"), weight);
+	}
 
 }

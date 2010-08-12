@@ -54,123 +54,129 @@ import org.apache.hadoop.hbase.util.Hash;
 /**
  * Implements a <i>Bloom filter</i>, as defined by Bloom in 1970.
  * <p>
- * The Bloom filter is a data structure that was introduced in 1970 and that has been adopted by 
- * the networking research community in the past decade thanks to the bandwidth efficiencies that it
- * offers for the transmission of set membership information between networked hosts.  A sender encodes 
- * the information into a bit vector, the Bloom filter, that is more compact than a conventional 
- * representation. Computation and space costs for construction are linear in the number of elements.  
- * The receiver uses the filter to test whether various elements are members of the set. Though the 
- * filter will occasionally return a false positive, it will never return a false negative. When creating 
- * the filter, the sender can choose its desired point in a trade-off between the false positive rate and the size. 
+ * The Bloom filter is a data structure that was introduced in 1970 and that has
+ * been adopted by the networking research community in the past decade thanks
+ * to the bandwidth efficiencies that it offers for the transmission of set
+ * membership information between networked hosts. A sender encodes the
+ * information into a bit vector, the Bloom filter, that is more compact than a
+ * conventional representation. Computation and space costs for construction are
+ * linear in the number of elements. The receiver uses the filter to test
+ * whether various elements are members of the set. Though the filter will
+ * occasionally return a false positive, it will never return a false negative.
+ * When creating the filter, the sender can choose its desired point in a
+ * trade-off between the false positive rate and the size.
  * 
  * contract <a href="http://www.one-lab.org">European Commission One-Lab Project 034819</a>.
- *
+ * 
  * @version 1.0 - 2 Feb. 07
  * 
  * @see org.onelab.filter.Filter The general behavior of a filter
  * 
- * @see <a href="http://portal.acm.org/citation.cfm?id=362692&dl=ACM&coll=portal">Space/Time Trade-Offs in Hash Coding with Allowable Errors</a>
+ * @see <a href="http://portal.acm.org/citation.cfm?id=362692&dl=ACM&coll=portal">
+ * 			Space/Time Trade-Offs in Hash Coding with Allowable Errors</a>
  */
 public class BloomFilter extends Filter {
-  /** The bit vector. */
-  BitSet bits;
+	/** The bit vector. */
+	BitSet bits;
 
-  /** Default constructor - use with readFields */
-  public BloomFilter() {
-    super();
-  }
-  
-  /**
-   * Constructor
-   * @param vectorSize The vector size of <i>this</i> filter.
-   * @param nbHash The number of hash function to consider.
-   * @param hashType type of the hashing function (see {@link Hash}).
-   */
-  public BloomFilter(int vectorSize, int nbHash, int hashType){
-    super(vectorSize, nbHash, hashType);
+	/** Default constructor - use with readFields */
+	public BloomFilter() {
+		super();
+	}
 
-    bits = new BitSet(this.vectorSize);
-  }//end constructor
+	/**
+	 * Constructor
+	 * 
+	 * @param vectorSize  The vector size of <i>this</i> filter.
+	 * @param nbHash  The number of hash function to consider.
+	 * @param hashType  type of the hashing function (see {@link Hash}).
+	 */
+	public BloomFilter(int vectorSize, int nbHash, int hashType) {
+		super(vectorSize, nbHash, hashType);
 
-  @Override
-  public void add(Key key) {
-    if (key == null) {
-      throw new IllegalArgumentException("Key can not be null");
-    }
+		bits = new BitSet(this.vectorSize);
+	}
 
-    int[] h = hash.hash(key);
-    hash.clear();
+	@Override
+	public void add(Key key) {
+		if (key == null) {
+			throw new IllegalArgumentException("Key can not be null");
+		}
 
-    for(int i = 0; i < nbHash; i++) {
-      bits.set(h[i]);
-    }
-  }//end add()
+		int[] h = hash.hash(key);
+		hash.clear();
 
-  @Override
-  public void and(Filter filter){
-    if(!isCompatible(filter)) {
-      throw new IllegalArgumentException("filters cannot be and-ed");
-    }
+		for (int i = 0; i < nbHash; i++) {
+			bits.set(h[i]);
+		}
+	}
 
-    this.bits.and(((BloomFilter) filter).bits);
-  }//end and()
+	@Override
+	public void and(Filter filter) {
+		if (!isCompatible(filter)) {
+			throw new IllegalArgumentException("filters cannot be and-ed");
+		}
 
-  @Override
-  public boolean membershipTest(Key key){
-    if (key == null) {
-      throw new IllegalArgumentException("Key can not be null");
-    }
+		this.bits.and(((BloomFilter) filter).bits);
+	}
 
-    int[] h = hash.hash(key);
-    hash.clear();
-    for(int i = 0; i < nbHash; i++) {
-      if(!bits.get(h[i])) {
-        return false;
-      }
-    }
-    return true;
-  }//end memberhsipTest()
+	@Override
+	public boolean membershipTest(Key key) {
+		if (key == null) {
+			throw new IllegalArgumentException("Key can not be null");
+		}
 
-  @Override
-  public void not(){
-    bits.flip(0, vectorSize - 1);
-  }//end not()
+		int[] h = hash.hash(key);
+		hash.clear();
+		for (int i = 0; i < nbHash; i++) {
+			if (!bits.get(h[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-  @Override
-  public void or(Filter filter){
-    if(!isCompatible(filter)) {
-      throw new IllegalArgumentException("filters cannot be or-ed");
-    }
-    bits.or(((BloomFilter) filter).bits);
-  }//end or()
+	@Override
+	public void not() {
+		bits.flip(0, vectorSize - 1);
+	}
 
-  @Override
-  public void xor(Filter filter){
-    if(!isCompatible(filter)) {
-      throw new IllegalArgumentException("filters cannot be xor-ed");
-    }
-    bits.xor(((BloomFilter) filter).bits);
-  }//and xor()
+	@Override
+	public void or(Filter filter) {
+		if (!isCompatible(filter)) {
+			throw new IllegalArgumentException("filters cannot be or-ed");
+		}
+		bits.or(((BloomFilter) filter).bits);
+	}
 
-  @Override
-  public String toString(){
-    return bits.toString();
-  }//end toString()
+	@Override
+	public void xor(Filter filter) {
+		if (!isCompatible(filter)) {
+			throw new IllegalArgumentException("filters cannot be xor-ed");
+		}
+		bits.xor(((BloomFilter) filter).bits);
+	}
 
-  @Override
-  public Object clone(){
-    BloomFilter bf = new BloomFilter(vectorSize, nbHash, hashType);
-    bf.or(this);
-    return bf;
-  }//end clone()
-  
-  private boolean isCompatible(Filter filter) {
-	  if ( filter == null ) return false;
-	  if ( !(filter instanceof BloomFilter) ) return false;
-	  if ( filter.vectorSize != this.vectorSize ) return false;
-	  if ( filter.nbHash != this.nbHash ) return false;
-	  
-	  return true;
-  }
-  
+	@Override
+	public String toString() {
+		return bits.toString();
+	}
+
+	@Override
+	public Object clone() {
+		BloomFilter bf = new BloomFilter(vectorSize, nbHash, hashType);
+		bf.or(this);
+		return bf;
+	}
+
+	private boolean isCompatible(Filter filter) {
+		if (filter == null) return false;
+		if (filter.getClass() != this.getClass()) return false;
+		if (filter.vectorSize != this.vectorSize) return false;
+		if (filter.nbHash != this.nbHash) return false;
+		if (filter.hashType != this.hashType) return false;
+
+		return true;
+	}
+
 }

@@ -57,139 +57,155 @@ import org.apache.hadoop.hbase.util.Hash;
 /**
  * Defines the general behavior of a filter.
  * <p>
- * A filter is a data structure which aims at offering a lossy summary of a set <code>A</code>.  The
- * key idea is to map entries of <code>A</code> (also called <i>keys</i>) into several positions 
- * in a vector through the use of several hash functions.
+ * A filter is a data structure which aims at offering a lossy summary of a set
+ * <code>A</code>. The key idea is to map entries of <code>A</code> (also called
+ * <i>keys</i>) into several positions in a vector through the use of several
+ * hash functions.
  * <p>
- * Typically, a filter will be implemented as a Bloom filter (or a Bloom filter extension).
+ * Typically, a filter will be implemented as a Bloom filter (or a Bloom filter
+ * extension).
  * <p>
  * It must be extended in order to define the real behavior.
  * 
  * @see org.onelab.filter.Filter The general behavior of a filter
- *
+ * 
  * @version 1.0 - 2 Feb. 07
  * 
  * @see org.onelab.filter.Key The general behavior of a key
  * @see org.onelab.filter.HashFunction A hash function
  */
 public abstract class Filter {
-  /** The vector size of <i>this</i> filter. */
-  protected int vectorSize;
+	/** The vector size of <i>this</i> filter. */
+	protected int vectorSize;
 
-  /** The hash function used to map a key to several positions in the vector. */
-  protected HashFunction hash;
+	/** The hash function used to map a key to several positions in the vector. */
+	protected HashFunction hash;
 
-  /** The number of hash function to consider. */
-  protected int nbHash;
-  
-  /** Type of hashing function to use. */
-  protected int hashType;
+	/** The number of hash function to consider. */
+	protected int nbHash;
 
-  /** Default constructor - use with readFields */
-  protected Filter() { super(); }
-  
-  /** 
-   * Constructor.
-   * @param vectorSize The vector size of <i>this</i> filter.
-   * @param nbHash The number of hash functions to consider.
-   * @param hashType type of the hashing function (see {@link Hash}).
-   */
-  protected Filter(int vectorSize, int nbHash, int hashType){
-    this.vectorSize = vectorSize;
-    this.nbHash = nbHash;
-    this.hashType = hashType;
-    this.hash = new HashFunction(this.vectorSize, this.nbHash, this.hashType);
-  }//end constructor
+	/** Type of hashing function to use. */
+	protected int hashType;
 
-  /**
-   * Adds a key to <i>this</i> filter.
-   * @param key The key to add.
-   */
-  public abstract void add(Key key);
+	/** Default constructor - use with readFields */
+	protected Filter() {
+		super();
+	}
 
-  /**
-   * Determines wether a specified key belongs to <i>this</i> filter.
-   * @param key The key to test.
-   * @return boolean True if the specified key belongs to <i>this</i> filter.
-   * 		     False otherwise.
-   */
-  public abstract boolean membershipTest(Key key);
+	/**
+	 * Constructor.
+	 * 
+	 * @param vectorSize  The vector size of <i>this</i> filter.
+	 * @param nbHash  The number of hash functions to consider.
+	 * @param hashType  type of the hashing function (see {@link Hash}).
+	 */
+	protected Filter(int vectorSize, int nbHash, int hashType) {
+		this.vectorSize = vectorSize;
+		this.nbHash = nbHash;
+		this.hashType = hashType;
+		this.hash = new HashFunction(this.vectorSize, this.nbHash, this.hashType);
+	}
 
-  /**
-   * Peforms a logical AND between <i>this</i> filter and a specified filter.
-   * <p>
-   * <b>Invariant</b>: The result is assigned to <i>this</i> filter.
-   * @param filter The filter to AND with.
-   */
-  public abstract void and(Filter filter);
+	/**
+	 * Adds a key to <i>this</i> filter.
+	 * 
+	 * @param key  The key to add.
+	 */
+	public abstract void add(Key key);
 
-  /**
-   * Peforms a logical OR between <i>this</i> filter and a specified filter.
-   * <p>
-   * <b>Invariant</b>: The result is assigned to <i>this</i> filter.
-   * @param filter The filter to OR with.
-   */
-  public abstract void or(Filter filter);
+	/**
+	 * Determines wether a specified key belongs to <i>this</i> filter.
+	 * 
+	 * @param key  The key to test.
+	 * @return boolean  True if the specified key belongs to <i>this</i> filter. False otherwise.
+	 */
+	public abstract boolean membershipTest(Key key);
 
-  /**
-   * Peforms a logical XOR between <i>this</i> filter and a specified filter.
-   * <p>
-   * <b>Invariant</b>: The result is assigned to <i>this</i> filter.
-   * @param filter The filter to XOR with.
-   */
-  public abstract void xor(Filter filter);
+	/**
+	 * Peforms a logical AND between <i>this</i> filter and a specified filter.
+	 * <p>
+	 * <b>Invariant</b>: The result is assigned to <i>this</i> filter.
+	 * 
+	 * @param filter  The filter to AND with.
+	 */
+	public abstract void and(Filter filter);
 
-  /**
-   * Performs a logical NOT on <i>this</i> filter.
-   * <p>
-   * The result is assigned to <i>this</i> filter.
-   */
-  public abstract void not();
+	/**
+	 * Peforms a logical OR between <i>this</i> filter and a specified filter.
+	 * <p>
+	 * <b>Invariant</b>: The result is assigned to <i>this</i> filter.
+	 * 
+	 * @param filter  The filter to OR with.
+	 */
+	public abstract void or(Filter filter);
 
-  /**
-   * Adds a list of keys to <i>this</i> filter.
-   * @param keys The list of keys.
-   */
-  public void add(List<Key> keys){
-    if(keys == null) {
-      throw new IllegalArgumentException("ArrayList<Key> may not be null");
-    }
+	/**
+	 * Peforms a logical XOR between <i>this</i> filter and a specified filter.
+	 * <p>
+	 * <b>Invariant</b>: The result is assigned to <i>this</i> filter.
+	 * 
+	 * @param filter  The filter to XOR with.
+	 */
+	public abstract void xor(Filter filter);
 
-    for(Key key: keys) {
-      add(key);
-    }
-  }//end add()
+	/**
+	 * Performs a logical NOT on <i>this</i> filter.
+	 * <p>
+	 * The result is assigned to <i>this</i> filter.
+	 */
+	public abstract void not();
 
-  /**
-   * Adds a collection of keys to <i>this</i> filter.
-   * @param keys The collection of keys.
-   */
-  public void add(Collection<Key> keys){
-    if(keys == null) {
-      throw new IllegalArgumentException("Collection<Key> may not be null");
-    }
-    for(Key key: keys) {
-      add(key);
-    }
-  }//end add()
+	/**
+	 * Adds a list of keys to <i>this</i> filter.
+	 * 
+	 * @param keys  The list of keys.
+	 */
+	public void add(List<Key> keys) {
+		if (keys == null) {
+			throw new IllegalArgumentException("ArrayList<Key> may not be null");
+		}
 
-  /**
-   * Adds an array of keys to <i>this</i> filter.
-   * @param keys The array of keys.
-   */
-  public void add(Key[] keys){
-    if(keys == null) {
-      throw new IllegalArgumentException("Key[] may not be null");
-    }
-    for(int i = 0; i < keys.length; i++) {
-      add(keys[i]);
-    }
-  }//end add()
+		for (Key key : keys) {
+			add(key);
+		}
+	}
 
-/**
-   * @return size of the the bloomfilter
-   */
-public int getVectorSize() {
-    return this.vectorSize;
-  }
-}//end class
+	/**
+	 * Adds a collection of keys to <i>this</i> filter.
+	 * 
+	 * @param keys
+	 *            The collection of keys.
+	 */
+	public void add(Collection<Key> keys) {
+		if (keys == null) {
+			throw new IllegalArgumentException("Collection<Key> may not be null");
+		}
+		for (Key key : keys) {
+			add(key);
+		}
+	}
+
+	/**
+	 * Adds an array of keys to <i>this</i> filter.
+	 * 
+	 * @param keys
+	 *            The array of keys.
+	 */
+	public void add(Key[] keys) {
+		if (keys == null) {
+			throw new IllegalArgumentException("Key[] may not be null");
+		}
+		for (int i = 0; i < keys.length; i++) {
+			add(keys[i]);
+		}
+	}
+
+	/**
+	 * @return size of the the bloomfilter
+	 */
+	public int getVectorSize() {
+		return this.vectorSize;
+	}
+
+}
+

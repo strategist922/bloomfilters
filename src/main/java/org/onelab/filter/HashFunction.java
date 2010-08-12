@@ -54,10 +54,10 @@ import org.apache.hadoop.hbase.util.Hash;
 /**
  * Implements a hash object that returns a certain number of hashed values.
  * <p>
- * It is based on the SHA-1 algorithm. 
+ * It is based on the SHA-1 algorithm.
  * 
  * @see org.onelab.filter.Filter The general behavior of a filter
- *
+ * 
  * @version 1.0 - 2 Feb. 07
  * 
  * @see org.onelab.filter.Key The general behavior of a key being stored in a filter
@@ -66,62 +66,66 @@ import org.apache.hadoop.hbase.util.Hash;
  * @see <a href="http://www.itl.nist.gov/fipspubs/fip180-1.htm">SHA-1 algorithm</a>
  */
 public final class HashFunction {
-  /** The number of hashed values. */
-  private final int nbHash;
+	/** The number of hashed values. */
+	private final int nbHash;
 
-  /** The maximum highest returned value. */
-  private final int maxValue;
+	/** The maximum highest returned value. */
+	private final int maxValue;
 
-  /** Hashing algorithm to use. */
-  private final Hash hashFunction;
-  
-  /**
-   * Constructor.
-   * <p>
-   * Builds a hash function that must obey to a given maximum number of returned values and a highest value.
-   * @param maxValue The maximum highest returned value.
-   * @param nbHash The number of resulting hashed values.
-   * @param hashType type of the hashing function (see {@link Hash}).
-   */
-  public HashFunction(int maxValue, int nbHash, int hashType) {
-    if(maxValue <= 0) {
-      throw new IllegalArgumentException("maxValue must be > 0");
-    }
-    
-    if(nbHash <= 0) {
-      throw new IllegalArgumentException("nbHash must be > 0");
-    }
+	/** Hashing algorithm to use. */
+	private final Hash hashFunction;
 
-    this.maxValue = maxValue;
-    this.nbHash = nbHash;
-    this.hashFunction = Hash.getInstance(hashType);
-    if (this.hashFunction == null)
-      throw new IllegalArgumentException("hashType must be known");
-  }//end constructor
+	/**
+	 * Constructor.
+	 * <p>
+	 * Builds a hash function that must obey to a given maximum number of
+	 * returned values and a highest value.
+	 * 
+	 * @param maxValue  The maximum highest returned value.
+	 * @param nbHash  The number of resulting hashed values.
+	 * @param hashType  type of the hashing function (see {@link Hash}).
+	 */
+	public HashFunction(int maxValue, int nbHash, int hashType) {
+		if (maxValue <= 0) {
+			throw new IllegalArgumentException("maxValue must be > 0");
+		}
 
-  /** Clears <i>this</i> hash function. A NOOP */
-  public void clear(){
-	  // NOOP
-  }//end clear()
+		if (nbHash <= 0) {
+			throw new IllegalArgumentException("nbHash must be > 0");
+		}
 
-  /**
-   * Hashes a specified key into several integers.
-   * @param k The specified key.
-   * @return The array of hashed values.
-   */
-  public int[] hash(Key k){
-      byte[] b = k.getBytes();
-      if(b == null) {
-        throw new IllegalArgumentException("buffer reference is null");
-      }
-      if(b.length == 0) {
-        throw new IllegalArgumentException("key length must be > 0");
-      }
-      int[] result = new int[nbHash];
-      for (int i = 0, initval = 0; i < nbHash; i++) {
-        initval = result[i] = Math.abs(hashFunction.hash(b, initval) % maxValue);
-      }
-      return result;
-  }//end hash() 
+		this.maxValue = maxValue;
+		this.nbHash = nbHash;
+		this.hashFunction = Hash.getInstance(hashType);
+		if (this.hashFunction == null)
+			throw new IllegalArgumentException("hashType must be known");
+	}
 
-}//end class
+	/** Clears <i>this</i> hash function. A NOOP */
+	public void clear() {
+		// NOOP
+	}
+
+	/**
+	 * Hashes a specified key into several integers.
+	 * 
+	 * @param k  The specified key.
+	 * 
+	 * @return The array of hashed values.
+	 */
+	public int[] hash(Key k) {
+		byte[] b = k.getBytes();
+		if (b == null) {
+			throw new IllegalArgumentException("buffer reference is null");
+		}
+		if (b.length == 0) {
+			throw new IllegalArgumentException("key length must be > 0");
+		}
+		int[] result = new int[nbHash];
+		for (int i = 0, initval = 0; i < nbHash; i++) {
+			initval = result[i] = Math.abs(hashFunction.hash(b, initval) % maxValue);
+		}
+		return result;
+	}
+
+}
