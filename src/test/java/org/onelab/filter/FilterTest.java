@@ -74,8 +74,8 @@ import org.onelab.filter.StringKey;
  *
  * @version 1.0 - 8 Feb. 07
  */
-public class TestFilter {
-  private static final Log LOG = LogFactory.getLog(TestFilter.class);
+public class FilterTest {
+  private static final Log LOG = LogFactory.getLog(FilterTest.class);
   
   /** Test a BloomFilter
    * @throws UnsupportedEncodingException

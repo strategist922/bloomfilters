@@ -15,10 +15,12 @@ import org.apache.hadoop.hbase.util.Hash;
 
 public class RotatingBloomFilter extends Filter {
 
-	private int maximumNumberOfKeysPerFilter; 
-	private int currentNumberOfKeys; 
-	private BloomFilter[] filters;
-	private int maximumNumberOfBloomFilters;  
+	protected BloomFilter[] filters;
+	protected int currentNumberOfKeys; 
+	protected int maximumNumberOfKeysPerFilter; 
+	protected int maximumNumberOfBloomFilters;
+	
+	protected static final String LINE_SEPARATOR = new String(new byte[]{Character.LINE_SEPARATOR});
 
 	/**
 	 * Constructor.
@@ -119,7 +121,7 @@ public class RotatingBloomFilter extends Filter {
 
 		for (int i = 0; i < filters.length; i++) {
 			res.append(filters[i]);
-			res.append(Character.LINE_SEPARATOR);
+			res.append(LINE_SEPARATOR);
 		}
 		return res.toString();
 	}
