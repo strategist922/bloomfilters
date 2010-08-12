@@ -130,7 +130,7 @@ public class DynamicBloomFilter extends Filter {
 	@Override
 	public void add(Key key) {
 		if (key == null) {
-			throw new NullPointerException("Key can not be null");
+			throw new IllegalArgumentException("Key can not be null");
 		}
 
 		BloomFilter bf = getActiveStandardBF();
