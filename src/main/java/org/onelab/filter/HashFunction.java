@@ -111,7 +111,7 @@ public final class HashFunction {
   public int[] hash(Key k){
       byte[] b = k.getBytes();
       if(b == null) {
-        throw new NullPointerException("buffer reference is null");
+        throw new IllegalArgumentException("buffer reference is null");
       }
       if(b.length == 0) {
         throw new IllegalArgumentException("key length must be > 0");
