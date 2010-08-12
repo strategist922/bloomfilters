@@ -32,6 +32,11 @@ public class RotatingBloomFilterTest {
 		bf = null;
 	}
 
+	@Test (expected=IllegalArgumentException.class)
+	public void testAddNullKey() {
+		bf.add((Key)null);
+	}
+	
 	@Test
 	public void testAddKeyAndMembershipTest() throws UnsupportedEncodingException {
 	    Key k1 = new StringKey("toto");
