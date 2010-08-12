@@ -7,10 +7,6 @@ package org.onelab.filter;
  * Licensed to the Apache Software Foundation (ASF).
  */
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
 import org.apache.hadoop.hbase.util.Hash;
 
 public class RotatingBloomFilter extends Filter {
@@ -154,14 +150,4 @@ public class RotatingBloomFilter extends Filter {
 		throw UNSUPPORTED;
 	}
 
-	@Override
-	public void write(DataOutput out) throws IOException {
-		throw UNSUPPORTED;
-	}
-
-	@Override
-	public void readFields(DataInput in) throws IOException {
-		throw UNSUPPORTED;
-	}
-	
 }

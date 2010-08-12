@@ -47,10 +47,6 @@
  */
 package org.onelab.filter;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
 import org.apache.hadoop.hbase.util.Hash;
 
 /**
@@ -246,32 +242,6 @@ public class DynamicBloomFilter extends Filter {
     }
     return dbf;
   }//end clone()
-
-  // Writable
-
-  @Override
-  public void write(DataOutput out) throws IOException {
-    super.write(out);
-    out.writeInt(nr);
-    out.writeInt(currentNbRecord);
-    out.writeInt(matrix.length);
-    for (int i = 0; i < matrix.length; i++) {
-      matrix[i].write(out);
-    }
-  }
-
-  @Override
-  public void readFields(DataInput in) throws IOException {
-    super.readFields(in);
-    nr = in.readInt();
-    currentNbRecord = in.readInt();
-    int len = in.readInt();
-    matrix = new BloomFilter[len];
-    for (int i = 0; i < matrix.length; i++) {
-      matrix[i] = new BloomFilter();
-      matrix[i].readFields(in);
-    }
-  }
 
   /**
    * Adds a new row to <i>this</i> dynamic Bloom filter.

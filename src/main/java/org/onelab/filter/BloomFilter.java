@@ -47,10 +47,6 @@
  */
 package org.onelab.filter;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
 import java.util.BitSet;
 
 import org.apache.hadoop.hbase.util.Hash;
@@ -76,17 +72,6 @@ import org.apache.hadoop.hbase.util.Hash;
  * @see <a href="http://portal.acm.org/citation.cfm?id=362692&dl=ACM&coll=portal">Space/Time Trade-Offs in Hash Coding with Allowable Errors</a>
  */
 public class BloomFilter extends Filter {
-  private static final byte[] bitvalues = new byte[] {
-    (byte)0x01,
-    (byte)0x02,
-    (byte)0x04,
-    (byte)0x08,
-    (byte)0x10,
-    (byte)0x20,
-    (byte)0x40,
-    (byte)0x80
-  };
-  
   /** The bit vector. */
   BitSet bits;
 
@@ -179,47 +164,6 @@ public class BloomFilter extends Filter {
     return bf;
   }//end clone()
   
-  @Override
-  public void write(DataOutput out) throws IOException {
-    super.write(out);
-    byte[] bytes = new byte[getNBytes()];
-    for(int i = 0, byteIndex = 0, bitIndex = 0; i < vectorSize; i++, bitIndex++) {
-      if (bitIndex == 8) {
-        bitIndex = 0;
-        byteIndex++;
-      }
-      if (bitIndex == 0) {
-        bytes[byteIndex] = 0;
-      }
-      if (bits.get(i)) {
-        bytes[byteIndex] |= bitvalues[bitIndex];
-      }
-    }
-    out.write(bytes);
-  }
-
-  @Override
-  public void readFields(DataInput in) throws IOException {
-    super.readFields(in);
-    bits = new BitSet(this.vectorSize);
-    byte[] bytes = new byte[getNBytes()];
-    in.readFully(bytes);
-    for(int i = 0, byteIndex = 0, bitIndex = 0; i < vectorSize; i++, bitIndex++) {
-      if (bitIndex == 8) {
-        bitIndex = 0;
-        byteIndex++;
-      }
-      if ((bytes[byteIndex] & bitvalues[bitIndex]) != 0) {
-        bits.set(i);
-      }
-    }
-  }
-  
-  /* @return number of bytes needed to hold bit vector */
-  private int getNBytes() {
-    return (vectorSize + 7) / 8;
-  }
-  
   private boolean isCompatible(Filter filter) {
 	  if ( filter == null ) return false;
 	  if ( !(filter instanceof BloomFilter) ) return false;
@@ -229,4 +173,4 @@ public class BloomFilter extends Filter {
 	  return true;
   }
   
-}//end class
+}

@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.onelab.filter.RotatingBloomFilter.LINE_SEPARATOR;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.hadoop.hbase.util.Hash;
@@ -172,16 +171,6 @@ public class RotatingBloomFilterTest {
 	@Test (expected=UnsupportedOperationException.class)
 	public void testNot() {
 		bf.not();
-	}
-
-	@Test (expected=UnsupportedOperationException.class)
-	public void testWrite() throws IOException {
-		bf.write(null);
-	}
-
-	@Test (expected=UnsupportedOperationException.class)
-	public void testReadFields() throws IOException {
-		bf.readFields(null);
 	}
 
 	@Test (expected=UnsupportedOperationException.class)

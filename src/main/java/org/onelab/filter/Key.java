@@ -47,130 +47,121 @@
  */
 package org.onelab.filter;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
-import org.apache.hadoop.io.WritableComparable;
-
 /**
- * The general behavior of a key that must be stored in a filter.
+ * The general behaviour of a key that must be stored in a filter.
  * 
  * @see org.onelab.filter.Filter The general behavior of a filter
  */
-public class Key implements WritableComparable {
-  /** Byte value of key */
-  byte[] bytes;
-  
-  /**
-   * The weight associated to <i>this</i> key.
-   * <p>
-   * <b>Invariant</b>: if it is not specified, each instance of 
-   * <code>Key</code> will have a default weight of 1.0
-   */
-  double weight;
+public class Key implements Comparable<Key> {
+	/** Byte value of key */
+	byte[] bytes;
 
-  /** default constructor - use with readFields */
-  public Key() { super(); }
+	/**
+	 * The weight associated to <i>this</i> key.
+	 * <p>
+	 * <b>Invariant</b>: if it is not specified, each instance of
+	 * <code>Key</code> will have a default weight of 1.0
+	 */
+	double weight;
 
-  /**
-   * Constructor.
-   * <p>
-   * Builds a key with a default weight.
-   * @param value The byte value of <i>this</i> key.
-   */
-  public Key(byte[] value) {
-    this(value, 1.0);
-  }//end constructor
+	/** default constructor - use with readFields */
+	public Key() {
+		super();
+	}
 
-  /**
-   * Constructor.
-   * <p>
-   * Builds a key with a specified weight.
-   * @param value The value of <i>this</i> key.
-   * @param weight The weight associated to <i>this</i> key.
-   */
-  public Key(byte[] value, double weight) {
-    set(value, weight);
-  }//end constructor
+	/**
+	 * Constructor.
+	 * <p>
+	 * Builds a key with a default weight.
+	 * 
+	 * @param value  The byte value of <i>this</i> key.
+	 */
+	public Key(byte[] value) {
+		this(value, 1.0);
+	}// end constructor
 
-  /**
-   * @param value
-   * @param weight
-   */
-  private void set(byte[] value, double weight) {
-    if(value == null) {
-      throw new IllegalArgumentException("value can not be null");
-    }
-    this.bytes = value;
-    this.weight = weight;
-  }
-  
-  /** @return byte[] The value of <i>this</i> key. */
-  public byte[] getBytes() {
-    return this.bytes;
-  }
+	/**
+	 * Constructor.
+	 * <p>
+	 * Builds a key with a specified weight.
+	 * 
+	 * @param value  The value of <i>this</i> key.
+	 * @param weight  The weight associated to <i>this</i> key.
+	 */
+	public Key(byte[] value, double weight) {
+		set(value, weight);
+	}// end constructor
 
-  /** @return Returns the weight associated to <i>this</i> key. */
-  public double getWeight(){
-    return weight;
-  }//end getWeight()
+	/**
+	 * @param value
+	 * @param weight
+	 */
+	private void set(byte[] value, double weight) {
+		if (value == null) {
+			throw new IllegalArgumentException("value can not be null");
+		}
+		this.bytes = value;
+		this.weight = weight;
+	}
 
-  /**
-   * Increments the weight of <i>this</i> key with a specified value. 
-   * @param weight The increment.
-   */
-  public void incrementWeight(double weight){
-    this.weight += weight;
-  }//end incrementWeight()
+	/** @return byte[] The value of <i>this</i> key. */
+	public byte[] getBytes() {
+		return this.bytes;
+	}
 
-  /** Increments the weight of <i>this</i> key by one. */
-  public void incrementWeight(){
-    this.weight++;
-  }//end incrementWeight()
+	/** @return Returns the weight associated to <i>this</i> key. */
+	public double getWeight() {
+		return weight;
+	}
 
-  @Override
-  public boolean equals(Object o) {
-    return this.compareTo(o) == 0;
-  }
-  
-  @Override
-  public int hashCode() {
-    int result = 0;
-    for(int i = 0; i < bytes.length; i++) {
-      result ^= Byte.valueOf(bytes[i]).hashCode();
-    }
-    result ^= Double.valueOf(weight).hashCode();
-    return result;
-  }
+	/**
+	 * Increments the weight of <i>this</i> key with a specified value.
+	 * 
+	 * @param weight  The increment.
+	 */
+	public void incrementWeight(double weight) {
+		this.weight += weight;
+	}
 
-  // Writable
+	/** Increments the weight of <i>this</i> key by one. */
+	public void incrementWeight() {
+		this.weight++;
+	}
 
-  public void write(DataOutput out) throws IOException {
-    out.writeInt(bytes.length);
-    out.write(bytes);
-    out.writeDouble(weight);
-  }
-  
-  public void readFields(DataInput in) throws IOException {
-    this.bytes = new byte[in.readInt()];
-    in.readFully(this.bytes);
-    weight = in.readDouble();
-  }
-  
-  // Comparable
-  
-  public int compareTo(Object o) {
-    Key other = (Key)o;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Key other = (Key) obj;
 
-    int result = this.bytes.length - other.getBytes().length;
-    for(int i = 0; result == 0 && i < bytes.length; i++) {
-      result = this.bytes[i] - other.bytes[i];
-    }
-    
-    if(result == 0) {
-      result = Double.valueOf(this.weight - other.weight).intValue();
-    }
-    return result;
-  }
-}//end class
+		return this.compareTo(other) == 0;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = 0;
+		for (int i = 0; i < bytes.length; i++) {
+			result ^= Byte.valueOf(bytes[i]).hashCode();
+		}
+		result ^= Double.valueOf(weight).hashCode();
+		return result;
+	}
+
+	@Override
+	public int compareTo(Key other) {
+		int result = this.bytes.length - other.getBytes().length;
+		for (int i = 0; result == 0 && i < bytes.length; i++) {
+			result = this.bytes[i] - other.bytes[i];
+		}
+
+		if (result == 0) {
+			result = Double.valueOf(this.weight - other.weight).intValue();
+		}
+		return result;
+	}
+
+}

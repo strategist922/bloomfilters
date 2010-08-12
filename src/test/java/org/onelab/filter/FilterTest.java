@@ -59,13 +59,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.hbase.util.Hash;
 import org.junit.Test;
-import org.onelab.filter.BloomFilter;
-import org.onelab.filter.CountingBloomFilter;
-import org.onelab.filter.DynamicBloomFilter;
-import org.onelab.filter.Filter;
-import org.onelab.filter.Key;
-import org.onelab.filter.RotatingBloomFilter;
-import org.onelab.filter.StringKey;
 
 /**
  * Test class.
@@ -267,46 +260,6 @@ public class FilterTest {
       }
     }
     LOG.info("Success!");
-  }
-  
-  /** Test a CountingBloomFilter
-   * @throws UnsupportedEncodingException
-   */
-  @Test
-  public void testCountingBloomFilter() throws UnsupportedEncodingException {
-    Filter bf = new CountingBloomFilter(8, 2, Hash.JENKINS_HASH);
-    Key key = new StringKey("toto");
-    Key k2 = new StringKey("lulu");
-    Key k3 = new StringKey("mama");
-    bf.add(key);
-    assertFalse(bf.membershipTest(new StringKey("graknyl"))); // no collision yet
-    bf.add(k2);
-    bf.add(k3);
-    assertTrue(bf.membershipTest(key));
-    assertTrue(bf.membershipTest(new StringKey("graknyl")));
-    assertFalse(bf.membershipTest(new StringKey("xyzzy")));
-    assertFalse(bf.membershipTest(new StringKey("abcd")));
-
-    // delete 'key', and check that it is no longer a member
-    ((CountingBloomFilter)bf).delete(key);
-    assertFalse(bf.membershipTest(key));
-    
-    // OR 'key' back into the filter
-    Filter bf2 = new CountingBloomFilter(8, 2, Hash.JENKINS_HASH);
-    bf2.add(key);
-    bf.or(bf2);
-    assertTrue(bf.membershipTest(key));
-    assertTrue(bf.membershipTest(new StringKey("graknyl")));
-    assertFalse(bf.membershipTest(new StringKey("xyzzy")));
-    assertFalse(bf.membershipTest(new StringKey("abcd")));
-    
-    // to test for overflows, add 'key' enough times to overflow an 8bit bucket,
-    // while asserting that it stays a member
-    for(int i = 0; i < 257; i++){
-      bf.add(key);
-      assertTrue(bf.membershipTest(key));
-    }
-    
   }
   
   /** Test a DynamicBloomFilter

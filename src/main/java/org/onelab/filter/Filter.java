@@ -49,14 +49,10 @@
  */
 package org.onelab.filter;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.hadoop.hbase.util.Hash;
-import org.apache.hadoop.io.Writable;
 
 /**
  * Defines the general behavior of a filter.
@@ -76,8 +72,7 @@ import org.apache.hadoop.io.Writable;
  * @see org.onelab.filter.Key The general behavior of a key
  * @see org.onelab.filter.HashFunction A hash function
  */
-public abstract class Filter implements Writable {
-  private static final int VERSION = -1; // negative to accommodate for old format 
+public abstract class Filter {
   /** The vector size of <i>this</i> filter. */
   protected int vectorSize;
 
@@ -190,30 +185,6 @@ public abstract class Filter implements Writable {
       add(keys[i]);
     }
   }//end add()
-  
-  // Writable interface
-  
-  public void write(DataOutput out) throws IOException {
-    out.writeInt(VERSION);
-    out.writeInt(this.nbHash);
-    out.writeByte(this.hashType);
-    out.writeInt(this.vectorSize);
-  }
-
-  public void readFields(DataInput in) throws IOException {
-    int ver = in.readInt();
-    if (ver > 0) { // old unversioned format
-      this.nbHash = ver;
-      this.hashType = Hash.JENKINS_HASH;
-    } else if (ver == VERSION) {
-      this.nbHash = in.readInt();
-      this.hashType = in.readByte();
-    } else {
-      throw new IOException("Unsupported version: " + ver);
-    }
-    this.vectorSize = in.readInt();
-    this.hash = new HashFunction(this.vectorSize, this.nbHash, this.hashType);
-  }
 
 /**
    * @return size of the the bloomfilter
