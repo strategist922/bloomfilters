@@ -83,6 +83,44 @@ public class RotatingBloomFilterTest {
 	}
 
 	@Test
+	public void testAddKeyWithRotation() throws UnsupportedEncodingException {
+		int n = maximumNumberOfKeysPerFilter * maximumNumberOfBloomFilters * 2;
+		
+		for (int i = 0; i < n; i++) {
+			bf.add(new StringKey("word-" + i));
+			assertEquals(i % maximumNumberOfKeysPerFilter + 1, bf.currentNumberOfKeys);
+			// before maximumNumberOfBloomFilters we add new rows
+			if ( i / maximumNumberOfKeysPerFilter < maximumNumberOfBloomFilters ) {
+				assertEquals(i / maximumNumberOfKeysPerFilter + 1, bf.filters.length);				
+			} else { // after maximumNumberOfBloomFilters we start rotating
+				assertEquals(maximumNumberOfBloomFilters, bf.filters.length);
+			}
+			checkMembership(bf, i, n);
+		}
+	}
+	
+	private void checkMembership(Filter bf, int current, int n) throws UnsupportedEncodingException {
+		System.out.println("current = " + current);
+		System.out.println("n = " + n);
+		for (int i = 0; i <= current; i++) {
+			System.out.println(i);
+			if ( current / maximumNumberOfKeysPerFilter < maximumNumberOfBloomFilters ) {
+				// we have not forget anything yet
+				assertTrue(bf.membershipTest(new StringKey("word-" + i)));
+			} else {
+				// we have not forget the oldest keys, so no check 
+				if ( i > maximumNumberOfBloomFilters * 2 ) {
+					assertTrue(bf.membershipTest(new StringKey("word-" + i)));
+				}
+			}
+//          Not doing this, since false negative are possible.			
+//			else {
+//				assertFalse(bf.membershipTest(new StringKey("word-" + i)));
+//			}
+		}
+	}
+	
+	@Test
 	public void testRotatingBloomFilter() {
 		assertNotNull(bf);
 		assertEquals(vectorSize, bf.vectorSize);
