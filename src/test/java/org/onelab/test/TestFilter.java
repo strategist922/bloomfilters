@@ -48,21 +48,24 @@
  */
 package org.onelab.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import junit.framework.TestCase;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.hbase.util.Hash;
 import org.junit.Test;
-import org.onelab.filter.*;
+import org.onelab.filter.BloomFilter;
+import org.onelab.filter.CountingBloomFilter;
+import org.onelab.filter.DynamicBloomFilter;
+import org.onelab.filter.Filter;
+import org.onelab.filter.Key;
+import org.onelab.filter.RotatingBloomFilter;
+import org.onelab.filter.StringKey;
 
 /**
  * Test class.
@@ -276,6 +279,7 @@ public class TestFilter {
     Key k2 = new StringKey("lulu");
     Key k3 = new StringKey("mama");
     bf.add(key);
+    assertFalse(bf.membershipTest(new StringKey("graknyl"))); // no collision yet
     bf.add(k2);
     bf.add(k3);
     assertTrue(bf.membershipTest(key));
@@ -315,6 +319,7 @@ public class TestFilter {
     Key k2 = new StringKey("lulu");
     Key k3 = new StringKey("mama");
     bf.add(key);
+    assertFalse(bf.membershipTest(new StringKey("graknyl"))); // no collision yet
     bf.add(k2);
     bf.add(k3);
     assertTrue(bf.membershipTest(key));
@@ -333,12 +338,32 @@ public class TestFilter {
     Key k2 = new StringKey("lulu");
     Key k3 = new StringKey("mama");
     bf.add(key);
+    assertFalse(bf.membershipTest(new StringKey("graknyl"))); // at this point there is no collision
     bf.add(k2);
     bf.add(k3);
     assertTrue(bf.membershipTest(key));
-    assertTrue(bf.membershipTest(new StringKey("graknyl")));
+    assertTrue(bf.membershipTest(new StringKey("graknyl"))); // this collides with "toto" and "lulu"
     assertFalse(bf.membershipTest(new StringKey("xyzzy")));
     assertFalse(bf.membershipTest(new StringKey("abcd")));
   }
+  
+//  private void printJenkinsHashCollision() throws UnsupportedEncodingException {
+//	  HashFunction hash = new HashFunction(8, 2, Hash.JENKINS_HASH);
+//	  
+//	  ArrayList<StringKey> words = new ArrayList<StringKey>();
+//	  words.add(new StringKey("toto"));
+//	  words.add(new StringKey("lulu"));
+//	  words.add(new StringKey("mama"));
+//	  words.add(new StringKey("graknyl"));
+//	  
+//	  for (Key word : words) {
+//		  int[] h1 = hash.hash(word);
+//		  System.out.print(word.getBytes() + " -> [ ");
+//		  for (int i = 0; i < h1.length; i++) {
+//			System.out.print(h1[i] + " ");
+//		}
+//		  System.out.println("]");
+//	}
+//  }
   
 }//end class
