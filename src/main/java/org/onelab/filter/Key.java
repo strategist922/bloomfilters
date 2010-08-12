@@ -98,7 +98,7 @@ public class Key implements WritableComparable {
    * @param value
    * @param weight
    */
-  public void set(byte[] value, double weight) {
+  private void set(byte[] value, double weight) {
     if(value == null) {
       throw new IllegalArgumentException("value can not be null");
     }
