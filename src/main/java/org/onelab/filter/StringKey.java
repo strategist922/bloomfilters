@@ -63,11 +63,6 @@ import java.io.UnsupportedEncodingException;
  */
 public class StringKey extends Key {
 
-	/** Default constructor - use with readFields */
-	public StringKey() {
-		super();
-	}
-
 	/**
 	 * Construct a Key using the specified String and default weight
 	 * 
