@@ -21,6 +21,7 @@ public class RotatingBloomFilter extends Filter {
 	protected int maximumNumberOfBloomFilters;
 	
 	protected static final String LINE_SEPARATOR = new String(new byte[]{Character.LINE_SEPARATOR});
+	private static final UnsupportedOperationException UNSUPPORTED = new UnsupportedOperationException("Not implemented.");
 
 	/**
 	 * Constructor.
@@ -130,37 +131,37 @@ public class RotatingBloomFilter extends Filter {
 	
 	@Override
 	public void and(Filter filter) {
-		throw new UnsupportedOperationException("Not implemented.");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public void not() {
-		throw new UnsupportedOperationException("Not implemented.");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public void or(Filter filter) {
-		throw new UnsupportedOperationException("Not implemented.");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public void xor(Filter filter) {
-		throw new UnsupportedOperationException("Not implemented.");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public Object clone() {
-		throw new UnsupportedOperationException("Not implemented.");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public void write(DataOutput out) throws IOException {
-		throw new UnsupportedOperationException("Not implemented.");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public void readFields(DataInput in) throws IOException {
-		throw new UnsupportedOperationException("Not implemented.");
+		throw UNSUPPORTED;
 	}
 	
 }
