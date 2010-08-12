@@ -88,7 +88,7 @@ public class DynamicBloomFilter extends Filter {
 	/**
 	 * Threshold for the maximum number of key to record in a dynamic Bloom filter row.
 	 */
-	private int nr;
+	private final int nr;
 
 	/**
 	 * The number of keys recorded in the current standard active Bloom filter.
