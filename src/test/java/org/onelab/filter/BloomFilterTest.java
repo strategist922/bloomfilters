@@ -160,6 +160,11 @@ public class BloomFilterTest {
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
+	public void testAndThrowsExceptionWhenFiltersAreIncompatible5() {
+		bf.and(null);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
 	public void testOrThrowsExceptionWhenFiltersAreIncompatible1() {
 		BloomFilter a = new BloomFilter(vectorSize + 1, numberHashFunctions, Hash.JENKINS_HASH);
 		bf.or(a);
