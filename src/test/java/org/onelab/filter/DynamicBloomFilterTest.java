@@ -215,53 +215,53 @@ public class DynamicBloomFilterTest {
 	
 	@Test
 	public void testAnd() throws UnsupportedEncodingException {
-		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH);
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		a.add(new StringKey("toto"));
-		assertEquals("{0, 6}", a.toString());
+		assertEquals("{0, 6}" + LINE_SEPARATOR, a.toString());
 
-		BloomFilter b = new BloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH);
+		DynamicBloomFilter b = new DynamicBloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		b.add(new StringKey("lula"));
 		b.add(new StringKey("to"));
-		assertEquals("{3, 4, 6}", b.toString());
+		assertEquals("{3, 4, 6}" + LINE_SEPARATOR, b.toString());
 		
 		a.and(b); // is like the intersection between two sets
 
-		assertEquals("{6}", a.toString());
-		assertEquals("{3, 4, 6}", b.toString());
+		assertEquals("{6}" + LINE_SEPARATOR, a.toString());
+		assertEquals("{3, 4, 6}" + LINE_SEPARATOR, b.toString());
 	}
 
 	@Test
 	public void testOr() throws UnsupportedEncodingException {
-		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH);
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		a.add(new StringKey("toto"));
-		assertEquals("{0, 6}", a.toString());
+		assertEquals("{0, 6}" + LINE_SEPARATOR, a.toString());
 
-		BloomFilter b = new BloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH);
+		DynamicBloomFilter b = new DynamicBloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		b.add(new StringKey("lula"));
 		b.add(new StringKey("to"));
-		assertEquals("{3, 4, 6}", b.toString());
+		assertEquals("{3, 4, 6}" + LINE_SEPARATOR, b.toString());
 		
 		a.or(b); // is like the union between two sets
 
-		assertEquals("{0, 3, 4, 6}", a.toString());
-		assertEquals("{3, 4, 6}", b.toString());
+		assertEquals("{0, 3, 4, 6}" + LINE_SEPARATOR, a.toString());
+		assertEquals("{3, 4, 6}" + LINE_SEPARATOR, b.toString());
 	}
 
 	@Test
 	public void testXor() throws UnsupportedEncodingException {
-		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH);
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		a.add(new StringKey("toto"));
-		assertEquals("{0, 6}", a.toString());
+		assertEquals("{0, 6}" + LINE_SEPARATOR, a.toString());
 
-		BloomFilter b = new BloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH);
+		DynamicBloomFilter b = new DynamicBloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		b.add(new StringKey("lula"));
 		b.add(new StringKey("to"));
-		assertEquals("{3, 4, 6}", b.toString());
+		assertEquals("{3, 4, 6}" + LINE_SEPARATOR, b.toString());
 		
 		a.xor(b); // is like the union less the intersection
 
-		assertEquals("{0, 3, 4}", a.toString());
-		assertEquals("{3, 4, 6}", b.toString());
+		assertEquals("{0, 3, 4}" + LINE_SEPARATOR, a.toString());
+		assertEquals("{3, 4, 6}" + LINE_SEPARATOR, b.toString());
 	}
 
 	@Test
