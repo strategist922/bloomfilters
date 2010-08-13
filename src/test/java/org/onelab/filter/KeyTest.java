@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.UnsupportedEncodingException;
+
 import org.junit.Test;
 
 public class KeyTest {
@@ -89,7 +91,7 @@ public class KeyTest {
 	}
 
 	@Test
-	public void testEqualsObject() {
+	public void testEqualsObject() throws UnsupportedEncodingException {
 		byte[] bytes1 = "toto".getBytes();
 		byte[] bytes2 = "toto".getBytes();
 		byte[] bytes3 = "lulu".getBytes();
@@ -97,7 +99,14 @@ public class KeyTest {
 		Key key1 = new Key(bytes1);
 		Key key2 = new Key(bytes2);
 		Key key3 = new Key(bytes3);
+		StringKey key4 = new StringKey("lulu");
 
+		assertEquals(key1, key1);
+		assertEquals(key1, (Object)key1);
+		assertEquals((Object)key1, key1);
+		assertEquals(key2, key2);
+		assertEquals(key3, key3);
+		
 		assertEquals(key1, key2);
 		assertEquals(key2, key1);
 
@@ -106,7 +115,13 @@ public class KeyTest {
 		
 		assertTrue(key1.equals((Object)key2));
 		assertTrue(key2.equals((Object)key1));
-		
+
+		assertFalse(key1.equals(null));
+		assertFalse(key1.equals(key4));
+		assertFalse(key4.equals(key1));
+		assertFalse(key1.equals((Object)key4));
+		assertFalse(key4.equals((Object)key1));
+
 		assertFalse(key1.equals(key3));
 		assertFalse(key3.equals(key1));
 		assertFalse(key2.equals(key3));
