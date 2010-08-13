@@ -117,10 +117,7 @@ public class RotatingBloomFilterTest {
 	}
 	
 	private void checkMembership(Filter bf, int current, int n) throws UnsupportedEncodingException {
-		System.out.println("current = " + current);
-		System.out.println("n = " + n);
 		for (int i = 0; i <= current; i++) {
-			System.out.println(i);
 			if ( current / maximumNumberOfKeysPerFilter < maximumNumberOfBloomFilters ) {
 				// we have not forget anything yet
 				assertTrue(bf.membershipTest(new StringKey("word-" + i)));
