@@ -276,19 +276,19 @@ public class DynamicBloomFilterTest {
 
 	@Test (expected=IllegalArgumentException.class)
 	public void testAndThrowsExceptionWhenFiltersAreIncompatible1() {
-		BloomFilter a = new BloomFilter(vectorSize + 1, numberHashFunctions, Hash.JENKINS_HASH);
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize + 1, numberHashFunctions, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		bf.and(a);
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testAndThrowsExceptionWhenFiltersAreIncompatible2() {
-		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions + 1, Hash.JENKINS_HASH);
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize, numberHashFunctions + 1, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		bf.and(a);
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testAndThrowsExceptionWhenFiltersAreIncompatible3() {
-		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions, Hash.MURMUR_HASH);
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize, numberHashFunctions, Hash.MURMUR_HASH, maximumNumberOfKeysPerFilter);
 		bf.and(a);
 	}
 	
@@ -305,31 +305,31 @@ public class DynamicBloomFilterTest {
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testOrThrowsExceptionWhenFiltersAreIncompatible1() {
-		BloomFilter a = new BloomFilter(vectorSize + 1, numberHashFunctions, Hash.JENKINS_HASH);
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize + 1, numberHashFunctions, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		bf.or(a);
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testOrThrowsExceptionWhenFiltersAreIncompatible2() {
-		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions + 1, Hash.JENKINS_HASH);
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize, numberHashFunctions + 1, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		bf.or(a);
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testOrThrowsExceptionWhenFiltersAreIncompatible3() {
-		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions, Hash.MURMUR_HASH);
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize, numberHashFunctions, Hash.MURMUR_HASH, maximumNumberOfKeysPerFilter);
 		bf.or(a);
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testXorThrowsExceptionWhenFiltersAreIncompatible1() {
-		BloomFilter a = new BloomFilter(vectorSize + 1, numberHashFunctions, Hash.JENKINS_HASH);
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize + 1, numberHashFunctions, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		bf.xor(a);
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testXorThrowsExceptionWhenFiltersAreIncompatible2() {
-		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions + 1, Hash.JENKINS_HASH);
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize, numberHashFunctions + 1, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		bf.xor(a);
 	}
 	
