@@ -3,6 +3,7 @@ package org.onelab.filter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -98,10 +99,23 @@ public class KeyTest {
 		Key key3 = new Key(bytes3);
 
 		assertEquals(key1, key2);
+		assertEquals(key2, key1);
+
+		assertTrue(key1.equals(key2));
+		assertTrue(key2.equals(key1));
+		
+		assertTrue(key1.equals((Object)key2));
+		assertTrue(key2.equals((Object)key1));
+		
 		assertFalse(key1.equals(key3));
 		assertFalse(key3.equals(key1));
 		assertFalse(key2.equals(key3));
 		assertFalse(key3.equals(key2));
+
+		assertFalse(key1.equals((Object)key3));
+		assertFalse(key3.equals((Object)key1));
+		assertFalse(key2.equals((Object)key3));
+		assertFalse(key3.equals((Object)key2));	
 	}
 
 	@Test
