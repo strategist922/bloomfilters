@@ -304,6 +304,15 @@ public class DynamicBloomFilterTest {
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
+	public void testAndThrowsExceptionWhenFiltersAreIncompatible6() {
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize, numberHashFunctions, Hash.MURMUR_HASH, maximumNumberOfKeysPerFilter);
+		a.add(new Key("toto".getBytes()));
+		a.add(new Key("lula".getBytes()));
+		a.add(new Key("mamma".getBytes()));
+		bf.and(a);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
 	public void testOrThrowsExceptionWhenFiltersAreIncompatible1() {
 		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize + 1, numberHashFunctions, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		bf.or(a);
@@ -324,6 +333,15 @@ public class DynamicBloomFilterTest {
 	@Test (expected=IllegalArgumentException.class)
 	public void testOrThrowsExceptionWhenFiltersAreIncompatible4() {
 		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize, numberHashFunctions, Hash.MURMUR_HASH, maximumNumberOfKeysPerFilter + 1);
+		bf.or(a);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testOrThrowsExceptionWhenFiltersAreIncompatible5() {
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize, numberHashFunctions, Hash.MURMUR_HASH, maximumNumberOfKeysPerFilter);
+		a.add(new Key("toto".getBytes()));
+		a.add(new Key("lula".getBytes()));
+		a.add(new Key("mamma".getBytes()));
 		bf.or(a);
 	}
 	
