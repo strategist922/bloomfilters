@@ -55,10 +55,10 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.hbase.util.Hash;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Test class.
@@ -68,7 +68,8 @@ import org.junit.Test;
  * @version 1.0 - 8 Feb. 07
  */
 public class FilterTest {
-  private static final Log LOG = LogFactory.getLog(FilterTest.class);
+
+  private static final Logger LOG = LoggerFactory.getLogger(FilterTest.class);
   
   /** Test a BloomFilter
    * @throws UnsupportedEncodingException

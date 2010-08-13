@@ -8,16 +8,20 @@ package org.onelab.filter;
  */
 
 import org.apache.hadoop.hbase.util.Hash;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RotatingBloomFilter extends Filter {
+
+	private static final Logger LOG = LoggerFactory.getLogger(RotatingBloomFilter.class);
+	private static final UnsupportedOperationException UNSUPPORTED = new UnsupportedOperationException("Not implemented.");
+
+	protected static final String LINE_SEPARATOR = new String(new byte[]{Character.LINE_SEPARATOR});
 
 	protected BloomFilter[] filters;
 	protected int currentNumberOfKeys; 
 	protected int maximumNumberOfKeysPerFilter; 
 	protected int maximumNumberOfBloomFilters;
-	
-	protected static final String LINE_SEPARATOR = new String(new byte[]{Character.LINE_SEPARATOR});
-	private static final UnsupportedOperationException UNSUPPORTED = new UnsupportedOperationException("Not implemented.");
 
 	/**
 	 * Constructor.
@@ -59,6 +63,7 @@ public class RotatingBloomFilter extends Filter {
 		bf.add(key);
 
 		currentNumberOfKeys++;
+		LOG.debug("Added key \"{}\" to BloomFilter in position {}, current number of keys incremented at {}", new Object[] { new String(key.getBytes()), (filters.length - 1), currentNumberOfKeys } );
 	}
 
 	@Override
@@ -69,6 +74,7 @@ public class RotatingBloomFilter extends Filter {
 
 		for (int i = 0; i < filters.length; i++) {
 			if (filters[i].membershipTest(key)) {
+				LOG.debug("Found a match for keyword \"{}\" in the BloomFilter in position {}", new String(key.getBytes()), i);
 				return true;
 			}
 		}
@@ -87,12 +93,14 @@ public class RotatingBloomFilter extends Filter {
 			for (int i = 0; i < filters.length; i++) {
 				tmp[i] = (BloomFilter) filters[i].clone();
 			}
+			LOG.debug("Increased the size of array of Bloom filters to {}", tmp.length);
 		} else { // rotate, drop the oldest row (i.e. i=0)
 			tmp = new BloomFilter[filters.length];
 
 			for (int i = 0; i < filters.length - 1; i++) {
 				tmp[i] = (BloomFilter) filters[i + 1].clone();
 			}
+			LOG.debug("Rotating array of Bloom filters, size kept at {}", tmp.length);
 		}
 		tmp[tmp.length - 1] = new BloomFilter(vectorSize, nbHash, hashType);			
 
@@ -109,6 +117,7 @@ public class RotatingBloomFilter extends Filter {
 			return null;
 		}
 
+		LOG.debug("Active Bloom filter is now the BloomFilter in position {}", filters.length - 1);
 		return filters[filters.length - 1];
 	}
 
@@ -127,26 +136,31 @@ public class RotatingBloomFilter extends Filter {
 	
 	@Override
 	public void and(Filter filter) {
+		LOG.error("Unsupported method called.");
 		throw UNSUPPORTED;
 	}
 
 	@Override
 	public void not() {
+		LOG.error("Unsupported method called.");
 		throw UNSUPPORTED;
 	}
 
 	@Override
 	public void or(Filter filter) {
+		LOG.error("Unsupported method called.");
 		throw UNSUPPORTED;
 	}
 
 	@Override
 	public void xor(Filter filter) {
+		LOG.error("Unsupported method called.");
 		throw UNSUPPORTED;
 	}
 
 	@Override
 	public Object clone() {
+		LOG.error("Unsupported method called.");
 		throw UNSUPPORTED;
 	}
 
