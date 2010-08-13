@@ -313,6 +313,12 @@ public class DynamicBloomFilterTest {
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
+	public void testAndThrowsExceptionWhenFiltersAreIncompatible7() {
+		BloomFilter a = new BloomFilter(vectorSize, numberHashFunctions, Hash.MURMUR_HASH);
+		bf.and(a);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
 	public void testOrThrowsExceptionWhenFiltersAreIncompatible1() {
 		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize + 1, numberHashFunctions, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		bf.or(a);
