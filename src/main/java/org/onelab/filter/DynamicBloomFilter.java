@@ -148,11 +148,6 @@ public class DynamicBloomFilter extends Filter {
 		}
 
 		DynamicBloomFilter dbf = (DynamicBloomFilter) filter;
-
-		if (dbf.matrix.length != this.matrix.length || dbf.nr != this.nr) {
-			throw new IllegalArgumentException("filters cannot be and-ed");
-		}
-
 		for (int i = 0; i < matrix.length; i++) {
 			matrix[i].and(dbf.matrix[i]);
 		}
@@ -187,10 +182,6 @@ public class DynamicBloomFilter extends Filter {
 		}
 
 		DynamicBloomFilter dbf = (DynamicBloomFilter) filter;
-
-		if (dbf.matrix.length != this.matrix.length || dbf.nr != this.nr) {
-			throw new IllegalArgumentException("filters cannot be or-ed");
-		}
 		for (int i = 0; i < matrix.length; i++) {
 			matrix[i].or(dbf.matrix[i]);
 		}
@@ -201,12 +192,8 @@ public class DynamicBloomFilter extends Filter {
 		if (!isCompatible(filter)) {
 			throw new IllegalArgumentException("filters cannot be xor-ed");
 		}
+
 		DynamicBloomFilter dbf = (DynamicBloomFilter) filter;
-
-		if (dbf.matrix.length != this.matrix.length || dbf.nr != this.nr) {
-			throw new IllegalArgumentException("filters cannot be xor-ed");
-		}
-
 		for (int i = 0; i < matrix.length; i++) {
 			matrix[i].xor(dbf.matrix[i]);
 		}
@@ -268,6 +255,8 @@ public class DynamicBloomFilter extends Filter {
 		if (filter.vectorSize != this.vectorSize) return false;
 		if (filter.nbHash != this.nbHash) return false;
 		if (filter.hashType != this.hashType) return false;
+		if (((DynamicBloomFilter)filter).matrix.length != this.matrix.length) return false;
+		if (((DynamicBloomFilter)filter).nr != this.nr) return false;
 
 		return true;
 	}
