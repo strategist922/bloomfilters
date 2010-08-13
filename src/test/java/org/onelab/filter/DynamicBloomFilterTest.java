@@ -305,7 +305,7 @@ public class DynamicBloomFilterTest {
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testAndThrowsExceptionWhenFiltersAreIncompatible6() {
-		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize, numberHashFunctions, Hash.MURMUR_HASH, maximumNumberOfKeysPerFilter);
+		DynamicBloomFilter a = new DynamicBloomFilter(vectorSize, numberHashFunctions, Hash.JENKINS_HASH, maximumNumberOfKeysPerFilter);
 		a.add(new Key("toto".getBytes()));
 		a.add(new Key("lula".getBytes()));
 		a.add(new Key("mamma".getBytes()));
