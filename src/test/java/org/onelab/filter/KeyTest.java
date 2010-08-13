@@ -36,6 +36,33 @@ public class KeyTest {
 		assertEquals(2.0, key.getWeight(), 0.01);
 	}
 
+	@Test (expected = IllegalArgumentException.class)
+	public void testKeyConstructorWithNull() {
+		new Key(null);
+	}
+	
+	@Test
+	public void testEquals() {
+		byte[] b1 = "toto".getBytes();
+		byte[] b2 = "toto".getBytes();
+		byte[] b3 = "lula".getBytes();
+		
+		Key k1 = new Key(b1);
+		Key k2 = new Key(b2);
+		Key k3 = new Key(b3);
+		Key k4 = new Key(b1, 2.0);
+		Key k5 = new Key(b1, 1.0);
+		
+		assertEquals(k1, k2);
+		assertEquals(k2, k1);
+		assertEquals(k1, k5);
+		assertEquals(k5, k1);
+		assertFalse(k1.equals(k3));
+		assertFalse(k3.equals(k1));
+		assertFalse(k1.equals(k4));
+		assertFalse(k4.equals(k1));
+	}
+
 	@Test
 	public void testIncrementWeightDouble() {
 		byte[] bytes = "toto".getBytes();
