@@ -67,13 +67,13 @@ import org.apache.hadoop.hbase.util.Hash;
  */
 public final class HashFunction {
 	/** The number of hashed values. */
-	private final int nbHash;
+	protected final int nbHash;
 
 	/** The maximum highest returned value. */
-	private final int maxValue;
+	protected final int maxValue;
 
 	/** Hashing algorithm to use. */
-	private final Hash hashFunction;
+	protected final Hash hashFunction;
 
 	/**
 	 * Constructor.
@@ -114,6 +114,9 @@ public final class HashFunction {
 	 * @return The array of hashed values.
 	 */
 	public int[] hash(Key k) {
+		if (k == null) {
+			throw new IllegalArgumentException("key cannot be null");
+		}
 		byte[] b = k.getBytes();
 		if (b == null) {
 			throw new IllegalArgumentException("buffer reference is null");
