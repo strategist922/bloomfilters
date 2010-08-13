@@ -88,17 +88,19 @@ public class DynamicBloomFilter extends Filter {
 	/**
 	 * Threshold for the maximum number of key to record in a dynamic Bloom filter row.
 	 */
-	private final int nr;
+	protected final int nr;
 
 	/**
 	 * The number of keys recorded in the current standard active Bloom filter.
 	 */
-	private int currentNbRecord;
+	protected int currentNbRecord;
 
 	/**
 	 * The matrix of Bloom filter.
 	 */
-	private BloomFilter[] matrix;
+	protected BloomFilter[] matrix;
+	
+	protected static final String LINE_SEPARATOR = new String(new byte[]{Character.LINE_SEPARATOR});
 
 	/**
 	 * Constructor.
@@ -159,7 +161,7 @@ public class DynamicBloomFilter extends Filter {
 	@Override
 	public boolean membershipTest(Key key) {
 		if (key == null) {
-			return true;
+			return false;
 		}
 
 		for (int i = 0; i < matrix.length; i++) {
@@ -216,7 +218,7 @@ public class DynamicBloomFilter extends Filter {
 
 		for (int i = 0; i < matrix.length; i++) {
 			res.append(matrix[i]);
-			res.append(Character.LINE_SEPARATOR);
+			res.append(LINE_SEPARATOR);
 		}
 		return res.toString();
 	}

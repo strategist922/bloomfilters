@@ -300,23 +300,4 @@ public class FilterTest {
     assertFalse(bf.membershipTest(new StringKey("abcd")));
   }
   
-//  private void printJenkinsHashCollision() throws UnsupportedEncodingException {
-//	  HashFunction hash = new HashFunction(8, 2, Hash.JENKINS_HASH);
-//	  
-//	  ArrayList<StringKey> words = new ArrayList<StringKey>();
-//	  words.add(new StringKey("toto"));
-//	  words.add(new StringKey("lulu"));
-//	  words.add(new StringKey("mama"));
-//	  words.add(new StringKey("graknyl"));
-//	  
-//	  for (Key word : words) {
-//		  int[] h1 = hash.hash(word);
-//		  System.out.print(word.getBytes() + " -> [ ");
-//		  for (int i = 0; i < h1.length; i++) {
-//			System.out.print(h1[i] + " ");
-//		}
-//		  System.out.println("]");
-//	}
-//  }
-  
 }//end class
