@@ -4,7 +4,7 @@
 
   <groupId>org.onelab</groupId>
   <artifactId>filter</artifactId>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>OneLab Bloom Filters</name>
@@ -127,15 +127,15 @@
 
   <distributionManagement>
     <repository>
-      <id>talis-repo-thirdparty</id>
-      <name>Talis Nexus ThirdParty Repository</name>
-      <url>http://locke.talis.local/nexus/content/repositories/thirdparty</url>
+      <id>talis-internal-releases</id>
+      <name>Talis Internal Relases Repository</name>
+      <url>http://locke.talis.local/nexus/content/repositories/releases</url>
       <layout>default</layout>
     </repository>
     <snapshotRepository>
-      <id>talis-repo-thirdparty-snapshots</id>
-      <name>Talis Nexus ThirdParty Snapshots Repository</name>
-      <url>http://locke.talis.local/nexus/content/repositories/thirdparty-snapshots</url>
+      <id>talis-internal-snapshots</id>
+      <name>Talis Internal Snapshots Repository</name>
+      <url>http://locke.talis.local/nexus/content/repositories/snapshots</url>
       <layout>default</layout>
     </snapshotRepository>
   </distributionManagement>
