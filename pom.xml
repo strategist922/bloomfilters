@@ -4,7 +4,7 @@
 
   <groupId>org.onelab</groupId>
   <artifactId>filter</artifactId>
-  <version>1.5-SNAPSHOT</version>
+  <version>1.6-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>OneLab Bloom Filters</name>
@@ -114,8 +114,8 @@
   </build>
 
   <scm>
-    <connection>scm:git:git://github.com/talis/talis-io.git</connection>
-    <url>http://github.com/talis/talis-io</url>
+    <connection>scm:git:git://github.com/talis/bloomfilters.git</connection>
+    <url>http://github.com/talis/bloomfilters</url>
   </scm>
 
   <properties>
