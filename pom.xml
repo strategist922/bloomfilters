@@ -4,17 +4,12 @@
 
   <groupId>org.onelab</groupId>
   <artifactId>filter</artifactId>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.4-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>OneLab Bloom Filters</name>
-  <url>http://mrpotatohead.talis.local/svn-repos/Components/java/BloomFilter/</url>
+  <url>http://github.com/talis/bloomfilters</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jdk.version>1.6</jdk.version>
-  </properties> 
-  
   <dependencies>
   
     <dependency>
@@ -118,25 +113,24 @@
 
   </build>
 
-  <repositories>
-    <repository>
-      <id>proxied-maven-repo</id>
-      <url>http://locke.talis.local/nexus/content/repositories/central</url>
-    </repository>
-  </repositories>
+  <scm>
+    <connection>scm:git:git://github.com/talis/talis-io.git</connection>
+    <url>http://github.com/talis/talis-io</url>
+  </scm>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jdk.version>1.6</jdk.version>
+  </properties> 
+  
   <distributionManagement>
     <repository>
-      <id>talis-internal-releases</id>
-      <name>Talis Internal Relases Repository</name>
-      <url>http://locke.talis.local/nexus/content/repositories/releases</url>
-      <layout>default</layout>
+      <id>talis-central-releases</id>
+      <url>http://oss.talisplatform.com/content/repositories/talis-central-releases</url>
     </repository>
     <snapshotRepository>
-      <id>talis-internal-snapshots</id>
-      <name>Talis Internal Snapshots Repository</name>
-      <url>http://locke.talis.local/nexus/content/repositories/snapshots</url>
-      <layout>default</layout>
+      <id>talis-central-snapshots</id>
+      <url>http://oss.talisplatform.com/content/repositories/talis-central-snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 
